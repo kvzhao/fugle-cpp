@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 
-project(fugle_terminal)
+project(fugleTerminal)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CPM_DOWNLOAD_VERSION 0.27.2)
@@ -38,12 +38,17 @@ CPMAddPackage(
 
 find_package(OpenSSL REQUIRED)
 
-include_directories(include)
-set(SOURCES src/)
+
+file(
+    GLOB_RECURSE
+    SOURCES
+    "src/*.cpp"
+)
+
+include_directories(inc)
 
 add_executable(
     ${PROJECT_NAME}
-    main.cpp
     ${SOURCES}
 )
 
