@@ -6,21 +6,29 @@
 
 #include "CLI/CLI.hpp"
 
+using namespace std;
 using namespace web;
 using namespace web::http;
 using namespace web::http::client;
 
+struct Args {
+  string filePath = "fugle_api_key.json";
+};
+
 int main(int argc, char **argv) {
   spdlog::info("Hello world!");
-
   CLI::App app{"Fugle Terminal"};
 
-  std::string filePath = "../fugle_api_key.json";
-  app.add_option("-f,--api-key-file", filePath, "Path to api key");
+  Args args;
+  app.add_option("-f,--api-file", args.filePath, "Path to api key");
 
-  CLI11_PARSE(app, argc, argv);
+  try {
+    app.parse(argc, argv);
+  } catch (const CLI::ParseError &e) {
+    return app.exit(e);
+  }
 
-  std::ifstream apiKeyFile(filePath);
+  std::ifstream apiKeyFile(args.filePath);
   if (!apiKeyFile.is_open()) {
     spdlog::error("Can not open the api key file");
     return 1;

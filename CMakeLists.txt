@@ -38,7 +38,14 @@ CPMAddPackage(
 
 find_package(OpenSSL REQUIRED)
 
-add_executable(${PROJECT_NAME} src/main.cpp)
+include_directories(include)
+set(SOURCES src/)
+
+add_executable(
+    ${PROJECT_NAME}
+    main.cpp
+    ${SOURCES}
+)
 
 target_link_libraries(
     ${PROJECT_NAME}
