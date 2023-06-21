@@ -14,6 +14,8 @@ using namespace fugle_terminal;
 
 struct Args {
   string filePath = "api_key.txt";
+  string endpoint = "/intraday/quote";
+  string symbol = "2330";
 };
 
 int main(int argc, char **argv) {
@@ -21,6 +23,8 @@ int main(int argc, char **argv) {
 
   Args args;
   app.add_option("-f,--api-file", args.filePath, "Path to api key");
+  app.add_option("-s,--stock-symbol", args.symbol, "symbol");
+  app.add_option("-e,--endpoint", args.endpoint, "endpoint");
 
   try {
     app.parse(argc, argv);
@@ -39,7 +43,8 @@ int main(int argc, char **argv) {
 
   FugleClient fugleClient(apiKey);
 
-  fugleClient.Get("/intraday/ticker/2330")
+  string request = args.endpoint + "/" + args.symbol;
+  fugleClient.Get(request)
       .then([](pplx::task<std::string> previousTask) {
         try {
           string responseString = previousTask.get();
