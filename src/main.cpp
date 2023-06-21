@@ -2,6 +2,7 @@
 #include <cpprest/http_client.h>
 #include <cpprest/json.h>
 
+#include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
 #include "CLI/CLI.hpp"
@@ -42,7 +43,8 @@ int main(int argc, char **argv) {
       .then([](pplx::task<std::string> previousTask) {
         try {
           string responseString = previousTask.get();
-          cout << "Response: " << responseString << std::endl;
+          nlohmann::json json = nlohmann::json::parse(responseString);
+          cout << "Response: " << json.dump(4) << std::endl;
         } catch (const std::exception &ex) {
           cerr << "Error occurred: " << ex.what() << std::endl;
         }

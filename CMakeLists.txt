@@ -21,6 +21,12 @@ CPMAddPackage(
     VERSION 1.7.0
 )
 
+CPMAddPackage(
+    NAME nlohmann_json
+    GITHUB_REPOSITORY nlohmann/json
+    VERSION 3.10.2
+)
+
 include(FetchContent)
 FetchContent_Declare(
     cli11
@@ -60,4 +66,5 @@ target_link_libraries(
     OpenSSL::SSL
     OpenSSL::Crypto
     CLI11::CLI11
+    nlohmann_json
 )
