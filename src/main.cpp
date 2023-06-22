@@ -16,6 +16,7 @@
 
 using namespace std;
 using namespace fugle_realtime;
+using namespace tabulate;
 
 struct Args {
   string filePath = "api_key.txt";
@@ -73,19 +74,26 @@ int main(int argc, char **argv) {
 
     tabulate::Table table;
     table.add_row({"Rank", "Symbol", "Value", "Volume", "Change", "Name"});
+    table.format().multi_byte_characters(true);
 
     uint32_t topStocks = std::min(100, (int)actives.data.size());
     for (uint32_t i = 0; i < topStocks; ++i) {
+      uint32_t rowIndex = i + 1;
       const auto &data = actives.data[i];
       auto valueStr = floatToString(data.tradeValue / 1e8);
       table.add_row({
-          to_string(i + 1),
+          to_string(rowIndex),
           data.symbol,
           valueStr,
           to_string(data.tradeVolume),
           floatToString(data.change),
           data.name,
       });
+      if (data.change > 0) {
+        table[rowIndex][4].format().font_background_color(Color::red);
+      } else {
+        table[rowIndex][4].format().font_background_color(Color::green);
+      }
     }
 
     cout << table << endl;
