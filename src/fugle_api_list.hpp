@@ -13,4 +13,11 @@ static const std::vector<std::string> kFugleAPIList = {
     "/snapshot/quotes/{market}",  "/snapshot/movers/{market}",
     "/snapshot/actives/{market}", "/historical/candles/{symbol}",
     "/historical/stats/{symbol}"};
+
+inline int ShowAPIs() {
+  for (const auto &s : kFugleAPIList) {
+    spdlog::info(s);
+  }
+  return 0;
+}
 }

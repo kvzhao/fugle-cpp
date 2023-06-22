@@ -22,13 +22,6 @@ struct Args {
   bool showApiList = false;
 };
 
-int ShowAPIs() {
-  for (const auto &s : kFugleAPIList) {
-    spdlog::info(s);
-  }
-  return 0;
-}
-
 int main(int argc, char **argv) {
   CLI::App app{"Fugle Terminal"};
 
