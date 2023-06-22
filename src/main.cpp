@@ -73,8 +73,17 @@ int main(int argc, char **argv) {
       spdlog::info("price = {} @ volume = {}, ask/bid = ({}, {})", data.price,
                    data.volume, data.volumeAtAsk, data.volumeAtBid);
     }
-  } else {
 
+    auto quote = intraday.Quote({.symbol = args.symbol});
+    spdlog::info("quote.lastPrice {}", quote.lastPrice);
+    spdlog::info("quote.total.tradeValue {}", quote.total.tradeValue);
+    spdlog::info("quote.total.tradeVolume {}", quote.total.tradeVolume);
+    spdlog::info("quote.total.tradeVolumeAtAsk {}",
+                 quote.total.tradeVolumeAtAsk);
+    spdlog::info("quote.total.tradeVolumeAtBid {}",
+                 quote.total.tradeVolumeAtBid);
+
+  } else {
     string request = args.endpoint + "/" + args.symbol;
     auto response = fugleClient.SimpleGet(request);
     spdlog::info("Response: {}", response);

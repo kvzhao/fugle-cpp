@@ -12,6 +12,8 @@ public:
 
   VolumeResponse Volumes(const VolumeParameter &param);
 
+  QuoteResponse Quote(const QuoteParameter &param);
+
 private:
 };
 

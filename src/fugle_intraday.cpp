@@ -11,6 +11,11 @@ using namespace std;
 using namespace fugle_realtime;
 
 const static string kIntrady = "intraday";
+const static string kTickers = "tickers";
+const static string kTicker = "ticker";
+const static string kQuote = "quote";
+const static string kCandles = "candles";
+const static string kTrades = "trades";
 const static string kVolumes = "volumes";
 
 FugleIntraday::FugleIntraday(const string &key)
@@ -34,4 +39,23 @@ VolumeResponse FugleIntraday::Volumes(const VolumeParameter &param) {
   }
 
   return volResp;
+}
+
+QuoteResponse FugleIntraday::Quote(const QuoteParameter &param) {
+  string symbol = param.symbol;
+  string resquest = joinWithSlash({kQuote, symbol});
+
+  string response = FugleHttpClientBase::SimpleGet(resquest);
+  spdlog::debug("response : {}", response);
+
+  auto jsonFormat = nlohmann::json::parse(response);
+
+  QuoteResponse quoteResp;
+  try {
+    jsonFormat.get_to(quoteResp);
+  } catch (const std::exception &ex) {
+    spdlog::error(ex.what());
+  }
+
+  return quoteResp;
 }
