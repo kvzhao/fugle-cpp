@@ -10,16 +10,18 @@
 using namespace std;
 using namespace fugle_realtime;
 
+const static string kIntrady = "intraday";
+const static string kVolumes = "volumes";
+
 FugleIntraday::FugleIntraday(const string &key)
-    : FugleHttpClientBase(key, kDefaultFugleMarketDataAPI + "/intraday") {}
+    : FugleHttpClientBase(
+          key, joinWithSlash({kDefaultFugleMarketDataAPI, kIntrady})) {}
 
 VolumeResponse FugleIntraday::Volumes(const VolumeParameter &param) {
-  const string method = "volumes";
   string symbol = param.symbol;
-  string resquest = joinWithSlash({method, symbol});
+  string resquest = joinWithSlash({kVolumes, symbol});
 
   string response = FugleHttpClientBase::SimpleGet(resquest);
-
   spdlog::debug("response : {}", response);
 
   auto jsonFormat = nlohmann::json::parse(response);

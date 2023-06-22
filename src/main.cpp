@@ -70,7 +70,8 @@ int main(int argc, char **argv) {
   spdlog::info("vol.symbol {}", vol.symbol);
   spdlog::info("vol.date {}", vol.date);
   for (const auto &data : vol.data) {
-    spdlog::info("vol.data.price {}", data.price);
+    spdlog::info("price = {} @ volume = {}, ask/bid = ({}, {})", data.price,
+                 data.volume, data.volumeAtAsk, data.volumeAtBid);
   }
 
   // string request = args.endpoint + "/" + args.symbol;
