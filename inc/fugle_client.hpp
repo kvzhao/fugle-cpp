@@ -18,15 +18,17 @@ using namespace std;
 
 const static string kXAPIKEY = "X-API-KEY";
 
-namespace fugle_terminal {
+namespace fugle_realtime {
 
 // intraday, snapshot, historical
 
-class FugleClient {
-public:
-  FugleClient(const string &key);
+// promoted to base class
 
-  FugleClient(const string &key, const string &url);
+class FugleHttpClientBase {
+public:
+  FugleHttpClientBase(const string &key);
+
+  FugleHttpClientBase(const string &key, const string &url);
 
   string SimpleGet(const string &request);
 
@@ -40,4 +42,4 @@ private:
   http_client _httpClient;
   http_headers _httpHeaders;
 };
-} // namespace fugle_terminal
+} // namespace fugle_realtime

@@ -2,7 +2,6 @@
 #include <cpprest/http_client.h>
 #include <cpprest/json.h>
 
-#include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
 #include "CLI/CLI.hpp"
@@ -10,7 +9,7 @@
 #include "fugle_client.hpp"
 
 using namespace std;
-using namespace fugle_terminal;
+using namespace fugle_realtime;
 
 struct Args {
   string filePath = "api_key.txt";
@@ -41,7 +40,7 @@ int main(int argc, char **argv) {
   getline(apiKeyFile, apiKey);
   spdlog::debug("Key {}", apiKey);
 
-  FugleClient fugleClient(apiKey);
+  FugleHttpClientBase fugleClient(apiKey);
 
   string request = args.endpoint + "/" + args.symbol;
   auto response = fugleClient.SimpleGet(request);

@@ -1,19 +1,19 @@
 
 #include "fugle_client.hpp"
 
-using namespace fugle_terminal;
+using namespace fugle_realtime;
 
-FugleClient::FugleClient(const string &key)
+FugleHttpClientBase::FugleHttpClientBase(const string &key)
     : _apiKey(key), _httpClient(U(_baseURL)) {
   _httpHeaders.add(kXAPIKEY, _apiKey);
 }
 
-FugleClient::FugleClient(const string &key, const string &url)
+FugleHttpClientBase::FugleHttpClientBase(const string &key, const string &url)
     : _apiKey(key), _baseURL(url), _httpClient(U(_baseURL)) {
   _httpHeaders.add(kXAPIKEY, _apiKey);
 }
 
-pplx::task<std::string> FugleClient::Get(const std::string &endpoint) {
+pplx::task<std::string> FugleHttpClientBase::Get(const std::string &endpoint) {
   uri_builder builder(U(endpoint));
 
   http_request request(methods::GET);
@@ -29,7 +29,7 @@ pplx::task<std::string> FugleClient::Get(const std::string &endpoint) {
   });
 }
 
-string FugleClient::SimpleGet(const string &request) {
+string FugleHttpClientBase::SimpleGet(const string &request) {
 
   ostringstream oss;
   this->Get(request)
