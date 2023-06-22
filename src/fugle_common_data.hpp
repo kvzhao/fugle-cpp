@@ -8,6 +8,10 @@ using namespace nlohmann;
 
 namespace fugle_realtime {
 
+const static std::string kExchange = "exchange";
+const static std::string kType = "type";
+const static std::string kMarket = "market";
+
 inline std::string sBoolean(bool isTrue) { return isTrue ? "true" : "false"; }
 
 enum class TickerType : uint8_t { EQUITY, INDEX, WARRANT, ODDLOT };

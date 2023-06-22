@@ -1,6 +1,6 @@
 #pragma once
 
-#include "fugle_client_base.hpp"
+#include "fugle_common_data.hpp"
 #include <map>
 #include <nlohmann/json.hpp>
 #include <string>
@@ -19,9 +19,6 @@ const static string kCandles = "candles";
 const static string kTrades = "trades";
 const static string kVolumes = "volumes";
 const static string kTimeFrame = "timeframe";
-const static string kExchange = "exchange";
-const static string kType = "type";
-const static string kMarket = "market";
 
 struct VolumeParameter {
   string symbol;
