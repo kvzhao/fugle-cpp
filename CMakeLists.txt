@@ -13,7 +13,6 @@ endif()
 
 include(${CPM_DOWNLOAD_LOCATION})
 
-find_package(cpprestsdk REQUIRED)
 
 CPMAddPackage(
     NAME spdlog
@@ -27,23 +26,28 @@ CPMAddPackage(
     VERSION 3.10.2
 )
 
-include(FetchContent)
-FetchContent_Declare(
-    cli11
-    GIT_REPOSITORY https://github.com/CLIUtils/CLI11
-    GIT_TAG v2.2.0
-)
-
-FetchContent_MakeAvailable(cli11)
-
 CPMAddPackage(
     NAME tabulate
     GITHUB_REPOSITORY p-ranav/tabulate
     VERSION 1.0
 )
 
-find_package(OpenSSL REQUIRED)
+FetchContent_Declare(
+    cli11
+    GIT_REPOSITORY https://github.com/CLIUtils/CLI11
+    GIT_TAG v2.2.0
+)
+include(FetchContent)
+FetchContent_MakeAvailable(cli11)
 
+find_package(OpenSSL REQUIRED)
+find_package(cpprestsdk REQUIRED)
+
+# Add Thirdpary libs
+set(SQLITECPP_RUN_CPPCHECK OFF CACHE BOOL "" FORCE)
+set(SQLITECPP_RUN_CPPLINT OFF CACHE BOOL "" FORCE)
+add_subdirectory(thirdparty/SQLiteCpp)
+add_subdirectory(thirdparty/TermOx EXCLUDE_FROM_ALL)
 
 file(
     GLOB_RECURSE
@@ -51,7 +55,7 @@ file(
     "src/*.cpp"
 )
 
-include_directories(inc)
+include_directories(src)
 
 add_executable(
     ${PROJECT_NAME}
@@ -67,4 +71,6 @@ target_link_libraries(
     OpenSSL::Crypto
     CLI11::CLI11
     nlohmann_json
+    SQLiteCpp
+    TermOx
 )

@@ -6,7 +6,11 @@
 
 #include "CLI/CLI.hpp"
 
-#include "fugle_client.hpp"
+#include "fugle_api_list.hpp"
+#include "fugle_client_base.hpp"
+
+// For test
+#include <SQLiteCpp/SQLiteCpp.h>
 
 using namespace std;
 using namespace fugle_realtime;
@@ -15,6 +19,7 @@ struct Args {
   string filePath = "api_key.txt";
   string endpoint = "/intraday/quote";
   string symbol = "2330";
+  bool showApiList = false;
 };
 
 int main(int argc, char **argv) {
@@ -24,6 +29,7 @@ int main(int argc, char **argv) {
   app.add_option("-f,--api-file", args.filePath, "Path to api key");
   app.add_option("-s,--stock-symbol", args.symbol, "symbol");
   app.add_option("-e,--endpoint", args.endpoint, "endpoint");
+  app.add_flag("-l,--show-api-list", args.showApiList, "print Fugle APIs");
 
   try {
     app.parse(argc, argv);
@@ -31,14 +37,20 @@ int main(int argc, char **argv) {
     return app.exit(e);
   }
 
-  std::ifstream apiKeyFile(args.filePath);
+  if (args.showApiList) {
+    spdlog::info("SQlite3 version {} {} ", SQLite::VERSION,
+                 SQLite::getLibVersion());
+    spdlog::info("SQliteCpp version {} ", SQLITECPP_VERSION);
+    return ShowAPIs();
+  }
+
+  std ::ifstream apiKeyFile(args.filePath);
   if (!apiKeyFile.is_open()) {
     spdlog::error("Can not open the api key file");
     return 1;
   }
   string apiKey;
   getline(apiKeyFile, apiKey);
-  spdlog::debug("Key {}", apiKey);
 
   FugleHttpClientBase fugleClient(apiKey);
 

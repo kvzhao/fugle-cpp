@@ -1,5 +1,5 @@
 
-#include "fugle_client.hpp"
+#include "fugle_client_base.hpp"
 
 using namespace fugle_realtime;
 
