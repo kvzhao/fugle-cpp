@@ -19,7 +19,7 @@ using namespace fugle_realtime;
 
 struct Args {
   string filePath = "api_key.txt";
-  string endpoint = "/intraday/quote";
+  string endpoint;
   string symbol = "2330";
   bool showApiList = false;
   bool debug = false;
@@ -65,18 +65,20 @@ int main(int argc, char **argv) {
   FugleHttpClientBase fugleClient(apiKey);
   FugleIntraday intraday(apiKey);
 
-  auto vol = intraday.Volumes({.symbol = args.symbol});
+  if (args.endpoint.empty()) {
+    auto vol = intraday.Volumes({.symbol = args.symbol});
+    spdlog::info("vol.symbol {}", vol.symbol);
+    spdlog::info("vol.date {}", vol.date);
+    for (const auto &data : vol.data) {
+      spdlog::info("price = {} @ volume = {}, ask/bid = ({}, {})", data.price,
+                   data.volume, data.volumeAtAsk, data.volumeAtBid);
+    }
+  } else {
 
-  spdlog::info("vol.symbol {}", vol.symbol);
-  spdlog::info("vol.date {}", vol.date);
-  for (const auto &data : vol.data) {
-    spdlog::info("price = {} @ volume = {}, ask/bid = ({}, {})", data.price,
-                 data.volume, data.volumeAtAsk, data.volumeAtBid);
+    string request = args.endpoint + "/" + args.symbol;
+    auto response = fugleClient.SimpleGet(request);
+    spdlog::info("Response: {}", response);
   }
-
-  // string request = args.endpoint + "/" + args.symbol;
-  // auto response = fugleClient.SimpleGet(request);
-  // spdlog::info("Response: {}", response);
 
   return 0;
 }
