@@ -8,6 +8,8 @@
 
 #include "fugle_api_list.hpp"
 #include "fugle_client_base.hpp"
+#include "fugle_intraday.hpp"
+#include "fugle_intraday_data.hpp"
 
 // For test
 #include <SQLiteCpp/SQLiteCpp.h>
@@ -20,6 +22,7 @@ struct Args {
   string endpoint = "/intraday/quote";
   string symbol = "2330";
   bool showApiList = false;
+  bool debug = false;
 };
 
 int main(int argc, char **argv) {
@@ -30,6 +33,7 @@ int main(int argc, char **argv) {
   app.add_option("-s,--stock-symbol", args.symbol, "symbol");
   app.add_option("-e,--endpoint", args.endpoint, "endpoint");
   app.add_flag("-l,--show-api-list", args.showApiList, "print Fugle APIs");
+  app.add_flag("-d,--set-debug-mode", args.debug, "set debug log");
 
   try {
     app.parse(argc, argv);
@@ -44,19 +48,34 @@ int main(int argc, char **argv) {
     return ShowAPIs();
   }
 
+  if (args.debug) {
+    spdlog::set_level(spdlog::level::debug);
+    spdlog::debug("Set to debug log");
+  }
+
   std ::ifstream apiKeyFile(args.filePath);
   if (!apiKeyFile.is_open()) {
     spdlog::error("Can not open the api key file");
     return 1;
   }
+
   string apiKey;
   getline(apiKeyFile, apiKey);
 
   FugleHttpClientBase fugleClient(apiKey);
+  FugleIntraday intraday(apiKey);
 
-  string request = args.endpoint + "/" + args.symbol;
-  auto response = fugleClient.SimpleGet(request);
-  spdlog::info("Response: {}", response);
+  auto vol = intraday.Volumes({.symbol = args.symbol});
+
+  spdlog::info("vol.symbol {}", vol.symbol);
+  spdlog::info("vol.date {}", vol.date);
+  for (const auto &data : vol.data) {
+    spdlog::info("vol.data.price {}", data.price);
+  }
+
+  // string request = args.endpoint + "/" + args.symbol;
+  // auto response = fugleClient.SimpleGet(request);
+  // spdlog::info("Response: {}", response);
 
   return 0;
 }
