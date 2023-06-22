@@ -14,6 +14,8 @@ public:
 
   QuoteResponse Quote(const QuoteParameter &param);
 
+  TradesResponse Trades(const TradesParameter &param);
+
 private:
 };
 

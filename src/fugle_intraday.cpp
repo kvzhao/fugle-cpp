@@ -59,3 +59,30 @@ QuoteResponse FugleIntraday::Quote(const QuoteParameter &param) {
 
   return quoteResp;
 }
+
+TradesResponse FugleIntraday::Trades(const TradesParameter &param) {
+  string symbol = param.symbol;
+
+  // TODO: parameters
+  if (param.limit != 0) {
+  }
+
+  if (param.offset != 0) {
+  }
+
+  string resquest = joinWithSlash({kTrades, symbol});
+
+  string response = FugleHttpClientBase::SimpleGet(resquest);
+  spdlog::debug("response : {}", response);
+
+  auto jsonFormat = nlohmann::json::parse(response);
+
+  TradesResponse tradesResp;
+  try {
+    jsonFormat.get_to(tradesResp);
+  } catch (const std::exception &ex) {
+    spdlog::error(ex.what());
+  }
+
+  return tradesResp;
+}

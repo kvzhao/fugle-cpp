@@ -75,6 +75,7 @@ int main(int argc, char **argv) {
     }
 
     auto quote = intraday.Quote({.symbol = args.symbol});
+    spdlog::info("quote.name {}", quote.name);
     spdlog::info("quote.lastPrice {}", quote.lastPrice);
     spdlog::info("quote.total.tradeValue {}", quote.total.tradeValue);
     spdlog::info("quote.total.tradeVolume {}", quote.total.tradeVolume);
@@ -82,6 +83,12 @@ int main(int argc, char **argv) {
                  quote.total.tradeVolumeAtAsk);
     spdlog::info("quote.total.tradeVolumeAtBid {}",
                  quote.total.tradeVolumeAtBid);
+
+    auto trades = intraday.Trades({.symbol = args.symbol});
+
+    for (const auto &data : trades.data) {
+      spdlog::info("trade p / v = {} / {} ", data.price, data.volume);
+    }
 
   } else {
     string request = args.endpoint + "/" + args.symbol;
