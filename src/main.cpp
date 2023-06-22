@@ -44,17 +44,8 @@ int main(int argc, char **argv) {
   FugleClient fugleClient(apiKey);
 
   string request = args.endpoint + "/" + args.symbol;
-  fugleClient.Get(request)
-      .then([](pplx::task<std::string> previousTask) {
-        try {
-          string responseString = previousTask.get();
-          nlohmann::json json = nlohmann::json::parse(responseString);
-          cout << "Response: " << json.dump(4) << std::endl;
-        } catch (const std::exception &ex) {
-          cerr << "Error occurred: " << ex.what() << std::endl;
-        }
-      })
-      .wait();
+  auto response = fugleClient.SimpleGet(request);
+  spdlog::info("Response: {}", response);
 
   return 0;
 }

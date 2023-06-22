@@ -28,3 +28,21 @@ pplx::task<std::string> FugleClient::Get(const std::string &endpoint) {
     }
   });
 }
+
+string FugleClient::SimpleGet(const string &request) {
+
+  ostringstream oss;
+  this->Get(request)
+      .then([&oss](pplx::task<std::string> previousTask) {
+        try {
+          string responseString = previousTask.get();
+          nlohmann::json json = nlohmann::json::parse(responseString);
+          oss << json.dump(4) << std::endl;
+        } catch (const std::exception &ex) {
+          oss << ex.what() << std::endl;
+        }
+      })
+      .wait();
+
+  return oss.str();
+}
