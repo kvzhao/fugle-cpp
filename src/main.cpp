@@ -6,10 +6,7 @@
 
 #include "CLI/CLI.hpp"
 
-#include "fugle_api_list.hpp"
-#include "fugle_client_base.hpp"
-#include "fugle_intraday.hpp"
-#include "fugle_intraday_data.hpp"
+#include "fugle.hpp"
 
 // For test
 #include <SQLiteCpp/SQLiteCpp.h>
@@ -105,6 +102,7 @@ int main(int argc, char **argv) {
     for (const auto &ticker : tickers.data) {
       spdlog::debug("{} {}", ticker.symbol, ticker.name);
     }
+    spdlog::info("# of tickers {}", tickers.data.size());
 
   } else {
     string request = args.endpoint + "/" + args.symbol;
