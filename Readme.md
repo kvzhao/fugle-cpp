@@ -1,7 +1,7 @@
 
-# Fugle Terminal
+# Fugle Terminal (WIP)
 
-* fugle-cpp
+* fugle-cpp: HTTP API for c++
 * fugle-terminal
 
 
@@ -9,14 +9,15 @@
 
 Install thirdparty libs
 
-
-Clone submobules
+1. Clone submobules
 ```bash
 git submodule update --init --recursive --jobs 0
 ```
 
-Install restcppsdk
+It will download `SQLiteCpp` and `TermOx`.
 
+
+2. Install restcppsdk
 
 Ubuntu
 ```bash
@@ -28,3 +29,8 @@ OSX
 brew install cpprestsdk
 ```
 
+3. Prepare API key
+
+The API Key file is needed.
+Please apply API key from official website: https://developer.fugle.tw/docs/key/
+Save your key in `api_key.txt`. 
