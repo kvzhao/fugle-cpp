@@ -51,7 +51,7 @@ file(
     "src/*.cpp"
 )
 
-include_directories(inc)
+include_directories(src)
 
 add_executable(
     ${PROJECT_NAME}
