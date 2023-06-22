@@ -25,6 +25,7 @@ enum class ExchangeType : uint8_t { TWSE, TPEx };
 const static std::map<ExchangeType, std::string> sExchangeType = {
     {ExchangeType::TWSE, "TWSE"}, {ExchangeType::TPEx, "TPEx"}};
 
+// TSE: 上市. OTC: 上櫃, ESB:興櫃一般板, TIB:臺灣創新板, PSB:興櫃戰略新板
 enum class MarketType : uint8_t { TSE, OTC, ESB, TIB, PSB };
 const static std::map<MarketType, std::string> sMarketType = {
     {MarketType::TSE, "TSE"},

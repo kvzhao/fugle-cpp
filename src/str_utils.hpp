@@ -1,5 +1,6 @@
 
 #pragma once
+#include <iomanip>
 #include <map>
 #include <sstream>
 #include <string>
@@ -48,6 +49,12 @@ buildUrlWithQueryParams(std::string &baseUrl,
   }
 
   return url.str();
+}
+
+inline std::string floatToString(float number, int precision = 2) {
+  std::stringstream stream;
+  stream << std::fixed << std::setprecision(precision) << number;
+  return stream.str();
 }
 
 } // namespace fugle_realtime
