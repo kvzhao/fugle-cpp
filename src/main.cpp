@@ -87,7 +87,15 @@ int main(int argc, char **argv) {
     auto trades = intraday.Trades({.symbol = args.symbol});
 
     for (const auto &data : trades.data) {
-      spdlog::info("trade p / v = {} / {} ", data.price, data.volume);
+      spdlog::debug("trade p / v = {} / {} ", data.price, data.volume);
+    }
+
+    auto candles = intraday.Candles(
+        {.symbol = args.symbol, .timeFrame = CandleTimeFrame::K_10_MIN});
+
+    for (const auto &data : candles.data) {
+      spdlog::debug("candle {}, {}, {}, {} ", data.open, data.high, data.low,
+                    data.close);
     }
 
   } else {

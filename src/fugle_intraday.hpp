@@ -16,6 +16,8 @@ public:
 
   TradesResponse Trades(const TradesParameter &param);
 
+  ChandlesResponse Candles(const ChandlesParameter &param);
+
 private:
 };
 

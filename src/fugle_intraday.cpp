@@ -17,6 +17,7 @@ const static string kQuote = "quote";
 const static string kCandles = "candles";
 const static string kTrades = "trades";
 const static string kVolumes = "volumes";
+const static string kTimeFrame = "timeframe";
 
 FugleIntraday::FugleIntraday(const string &key)
     : FugleHttpClientBase(
@@ -85,4 +86,25 @@ TradesResponse FugleIntraday::Trades(const TradesParameter &param) {
   }
 
   return tradesResp;
+}
+
+ChandlesResponse FugleIntraday::Candles(const ChandlesParameter &param) {
+  string symbol = param.symbol;
+  string resquest = joinWithSlash({kCandles, symbol});
+
+  std::map<std::string, std::string> queryParams;
+  queryParams[kTimeFrame] = sChandleTimeFrame.at(param.timeFrame);
+  resquest = buildUrlWithQueryParams(resquest, queryParams);
+  string response = FugleHttpClientBase::SimpleGet(resquest);
+  spdlog::debug("resquest {}", resquest);
+
+  auto jsonFormat = nlohmann::json::parse(response);
+  ChandlesResponse candleResp;
+  try {
+    jsonFormat.get_to(candleResp);
+  } catch (const std::exception &ex) {
+    spdlog::error(ex.what());
+  }
+
+  return candleResp;
 }

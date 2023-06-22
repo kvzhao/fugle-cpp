@@ -1,6 +1,7 @@
 #pragma once
 
 #include "fugle_client_base.hpp"
+#include <map>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <vector>
@@ -196,6 +197,67 @@ struct TradesResponse {
 };
 template <typename BasicJsonType>
 inline void from_json(const BasicJsonType &j, TradesResponse &data) {
+  j.at("date").get_to(data.date);
+  j.at("exchange").get_to(data.exchange);
+  j.at("market").get_to(data.market);
+  j.at("symbol").get_to(data.symbol);
+  j.at("type").get_to(data.type);
+  j.at("data").get_to(data.data);
+}
+
+enum class CandleTimeFrame : uint32_t {
+  K_1_MIN,
+  K_5_MIN,
+  K_10_MIN,
+  K_15_MIN,
+  K_30_MIN,
+  K_60_MIN
+};
+
+const static std::map<CandleTimeFrame, string> sChandleTimeFrame = {
+    {CandleTimeFrame::K_1_MIN, "1"},   {CandleTimeFrame::K_5_MIN, "5"},
+    {CandleTimeFrame::K_10_MIN, "10"}, {CandleTimeFrame::K_15_MIN, "15"},
+    {CandleTimeFrame::K_30_MIN, "30"}, {CandleTimeFrame::K_60_MIN, "60"},
+};
+
+struct ChandlesParameter {
+  string symbol;
+  string type;
+  CandleTimeFrame timeFrame = CandleTimeFrame::K_1_MIN;
+};
+
+struct CandleData {
+  string date;
+  float open;
+  float high;
+  float low;
+  float close;
+  float average;
+  uint32_t volume;
+};
+
+template <typename BasicJsonType>
+inline void from_json(const BasicJsonType &j, CandleData &data) {
+  j.at("date").get_to(data.date);
+  j.at("open").get_to(data.open);
+  j.at("close").get_to(data.close);
+  j.at("high").get_to(data.high);
+  j.at("low").get_to(data.low);
+  j.at("average").get_to(data.average);
+  j.at("volume").get_to(data.volume);
+}
+
+struct ChandlesResponse {
+  string date;
+  string exchange;
+  string market;
+  string symbol;
+  string type;
+  string timeframe;
+  vector<CandleData> data;
+};
+template <typename BasicJsonType>
+inline void from_json(const BasicJsonType &j, ChandlesResponse &data) {
   j.at("date").get_to(data.date);
   j.at("exchange").get_to(data.exchange);
   j.at("market").get_to(data.market);
