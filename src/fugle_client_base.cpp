@@ -1,16 +1,20 @@
 
 #include "fugle_client_base.hpp"
+#include "str_utils.hpp"
+#include <spdlog/spdlog.h>
 
 using namespace fugle_realtime;
 
 FugleHttpClientBase::FugleHttpClientBase(const string &key)
     : _apiKey(key), _httpClient(U(_baseURL)) {
   _httpHeaders.add(kXAPIKEY, _apiKey);
+  spdlog::debug("set base url {}", _baseURL);
 }
 
 FugleHttpClientBase::FugleHttpClientBase(const string &key, const string &url)
     : _apiKey(key), _baseURL(url), _httpClient(U(_baseURL)) {
   _httpHeaders.add(kXAPIKEY, _apiKey);
+  spdlog::debug("set base url {}", _baseURL);
 }
 
 pplx::task<std::string> FugleHttpClientBase::Get(const std::string &endpoint) {
@@ -29,7 +33,10 @@ pplx::task<std::string> FugleHttpClientBase::Get(const std::string &endpoint) {
   });
 }
 
-string FugleHttpClientBase::SimpleGet(const string &request) {
+string FugleHttpClientBase::SimpleGet(const string &input) {
+
+  auto request = addSlashIfNeeded(input);
+  spdlog::debug("request : {}", request);
 
   ostringstream oss;
   this->Get(request)

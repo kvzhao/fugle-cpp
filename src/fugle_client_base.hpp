@@ -17,7 +17,8 @@ using namespace web::http::client;
 using namespace std;
 
 const static string kXAPIKEY = "X-API-KEY";
-
+const static string kDefaultFugleMarketDataAPI =
+    "https://api.fugle.tw/marketdata/v1.0/stock";
 namespace fugle_realtime {
 
 // intraday, snapshot, historical
@@ -34,11 +35,11 @@ public:
 
 private:
   // Move GET Internally
-  pplx::task<std::string> Get(const std::string &endpoint);
+  pplx::task<string> Get(const string &endpoint);
 
 private:
   string _apiKey;
-  string _baseURL = "https://api.fugle.tw/marketdata/v1.0/stock";
+  string _baseURL = kDefaultFugleMarketDataAPI;
   http_client _httpClient;
   http_headers _httpHeaders;
 };
