@@ -9,6 +9,9 @@
 #include "fugle_api_list.hpp"
 #include "fugle_client_base.hpp"
 
+// For test
+#include <SQLiteCpp/SQLiteCpp.h>
+
 using namespace std;
 using namespace fugle_realtime;
 
@@ -42,6 +45,9 @@ int main(int argc, char **argv) {
   }
 
   if (args.showApiList) {
+    spdlog::info("SQlite3 version {} {} ", SQLite::VERSION,
+                 SQLite::getLibVersion());
+    spdlog::info("SQliteCpp version {} ", SQLITECPP_VERSION);
     return ShowAPIs();
   }
 

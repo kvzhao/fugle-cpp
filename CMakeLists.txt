@@ -44,6 +44,9 @@ CPMAddPackage(
 
 find_package(OpenSSL REQUIRED)
 
+set(SQLITECPP_RUN_CPPCHECK OFF CACHE BOOL "" FORCE)
+set(SQLITECPP_RUN_CPPLINT OFF CACHE BOOL "" FORCE)
+add_subdirectory(thirdparty/SQLiteCpp)
 
 file(
     GLOB_RECURSE
@@ -67,4 +70,5 @@ target_link_libraries(
     OpenSSL::Crypto
     CLI11::CLI11
     nlohmann_json
+    SQLiteCpp
 )
