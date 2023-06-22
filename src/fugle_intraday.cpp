@@ -10,15 +10,6 @@
 using namespace std;
 using namespace fugle_realtime;
 
-const static string kIntrady = "intraday";
-const static string kTickers = "tickers";
-const static string kTicker = "ticker";
-const static string kQuote = "quote";
-const static string kCandles = "candles";
-const static string kTrades = "trades";
-const static string kVolumes = "volumes";
-const static string kTimeFrame = "timeframe";
-
 FugleIntraday::FugleIntraday(const string &key)
     : FugleHttpClientBase(
           key, joinWithSlash({kDefaultFugleMarketDataAPI, kIntrady})) {}
@@ -95,8 +86,9 @@ ChandlesResponse FugleIntraday::Candles(const ChandlesParameter &param) {
   std::map<std::string, std::string> queryParams;
   queryParams[kTimeFrame] = sChandleTimeFrame.at(param.timeFrame);
   resquest = buildUrlWithQueryParams(resquest, queryParams);
-  string response = FugleHttpClientBase::SimpleGet(resquest);
   spdlog::debug("resquest {}", resquest);
+
+  string response = FugleHttpClientBase::SimpleGet(resquest);
 
   auto jsonFormat = nlohmann::json::parse(response);
   ChandlesResponse candleResp;
@@ -107,4 +99,29 @@ ChandlesResponse FugleIntraday::Candles(const ChandlesParameter &param) {
   }
 
   return candleResp;
+}
+
+TickersResponse FugleIntraday::Tickers(const TickersParameter &param) {
+
+  string resquest = joinWithSlash({kTickers});
+
+  std::map<std::string, std::string> queryParams;
+  queryParams[kType] = sTickerType.at(param.type);
+  queryParams[kExchange] = sExchangeType.at(param.exchange);
+  queryParams[kMarket] = sMarketType.at(param.market);
+
+  resquest = buildUrlWithQueryParams(resquest, queryParams);
+  spdlog::debug("resquest {}", resquest);
+
+  string response = FugleHttpClientBase::SimpleGet(resquest);
+
+  auto jsonFormat = nlohmann::json::parse(response);
+  TickersResponse tickersResp;
+  try {
+    jsonFormat.get_to(tickersResp);
+  } catch (const std::exception &ex) {
+    spdlog::error(ex.what());
+  }
+
+  return tickersResp;
 }

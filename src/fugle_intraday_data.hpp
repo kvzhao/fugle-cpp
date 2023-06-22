@@ -11,6 +11,18 @@ using namespace nlohmann;
 
 namespace fugle_realtime {
 
+const static string kIntrady = "intraday";
+const static string kTickers = "tickers";
+const static string kTicker = "ticker";
+const static string kQuote = "quote";
+const static string kCandles = "candles";
+const static string kTrades = "trades";
+const static string kVolumes = "volumes";
+const static string kTimeFrame = "timeframe";
+const static string kExchange = "exchange";
+const static string kType = "type";
+const static string kMarket = "market";
+
 struct VolumeParameter {
   string symbol;
   string type;
@@ -205,7 +217,7 @@ inline void from_json(const BasicJsonType &j, TradesResponse &data) {
   j.at("data").get_to(data.data);
 }
 
-enum class CandleTimeFrame : uint32_t {
+enum class CandleTimeFrame : uint8_t {
   K_1_MIN,
   K_5_MIN,
   K_10_MIN,
@@ -265,5 +277,78 @@ inline void from_json(const BasicJsonType &j, ChandlesResponse &data) {
   j.at("type").get_to(data.type);
   j.at("data").get_to(data.data);
 }
+
+enum class TickerType : uint8_t { EQUITY, INDEX, WARRANT, ODDLOT };
+const static std::map<TickerType, string> sTickerType = {
+    {TickerType::EQUITY, "EQUITY"},
+    {TickerType::INDEX, "INDEX"},
+    {TickerType::WARRANT, "WARRANT"},
+    {TickerType::ODDLOT, "ODDLOT"}};
+
+enum class ExchangeType : uint8_t { TWSE, TPEx };
+const static std::map<ExchangeType, string> sExchangeType = {
+    {ExchangeType::TWSE, "TWSE"}, {ExchangeType::TPEx, "TPEx"}};
+
+enum class MarketType : uint8_t { TSE, OTC, ESB, TIB, PSB };
+const static std::map<MarketType, string> sMarketType = {
+    {MarketType::TSE, "TSE"},
+    {MarketType::OTC, "OTC"},
+    {MarketType::ESB, "ESB"},
+    {MarketType::TIB, "TIB"},
+    {MarketType::PSB, "PSB"}};
+struct TickersParameter {
+  TickerType type = TickerType::EQUITY;
+  ExchangeType exchange = ExchangeType::TWSE;
+  MarketType market = MarketType::TSE;
+  // TODO
+  string industry;
+  bool isNormal = true;
+  bool isAttention = true;
+  bool isDisposition = true;
+  bool isHalted = true;
+};
+
+struct TickerData {
+  string symbol;
+  string name;
+};
+template <typename BasicJsonType>
+inline void from_json(const BasicJsonType &j, TickerData &data) {
+  j.at("symbol").get_to(data.symbol);
+  j.at("name").get_to(data.name);
+};
+
+struct TickersResponse {
+  string date;
+  string type;
+  string exchange;
+  string market;
+  bool isNormal;
+  bool isAttention;
+  bool isDisposition;
+  bool isHalted;
+  vector<TickerData> data;
+};
+template <typename BasicJsonType>
+inline void from_json(const BasicJsonType &j, TickersResponse &data) {
+  j.at("date").get_to(data.date);
+  j.at("exchange").get_to(data.exchange);
+  j.at("market").get_to(data.market);
+  j.at("type").get_to(data.type);
+  j.at("data").get_to(data.data);
+
+  if (j.count("isNormal")) {
+  j.at("isNormal").get_to(data.isNormal);
+  }
+  if (j.count("isAttention")) {
+  j.at("isAttention").get_to(data.isAttention);
+  }
+  if (j.count("isDisposition")) {
+  j.at("isDisposition").get_to(data.isDisposition);
+  }
+  if (j.count("isHalted")) {
+  j.at("isHalted").get_to(data.isHalted);
+  }
+};
 
 } // namespace fugle_realtime

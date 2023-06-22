@@ -98,6 +98,14 @@ int main(int argc, char **argv) {
                     data.close);
     }
 
+    auto tickers = intraday.Tickers({.type = TickerType::EQUITY,
+                                     .exchange = ExchangeType::TWSE,
+                                     .market = MarketType::TSE});
+
+    for (const auto &ticker : tickers.data) {
+      spdlog::debug("{} {}", ticker.symbol, ticker.name);
+    }
+
   } else {
     string request = args.endpoint + "/" + args.symbol;
     auto response = fugleClient.SimpleGet(request);
