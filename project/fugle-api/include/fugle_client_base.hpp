@@ -21,26 +21,29 @@ const static string kDefaultFugleMarketDataAPI =
     "https://api.fugle.tw/marketdata/v1.0/stock";
 namespace fugle_realtime {
 
-// intraday, snapshot, historical
-
-// promoted to base class
-
 class FugleHttpClientBase {
-public:
-  FugleHttpClientBase(const string &key);
+  public:
+    FugleHttpClientBase();
 
-  FugleHttpClientBase(const string &key, const string &url);
+    FugleHttpClientBase(const string &url);
 
-  string SimpleGet(const string &request);
+    FugleHttpClientBase(const string &key, const string &url);
 
-private:
-  // Move GET Internally
-  pplx::task<string> Get(const string &endpoint);
+    string SimpleGet(const string &request);
 
-private:
-  string _apiKey;
-  string _baseURL = kDefaultFugleMarketDataAPI;
-  http_client _httpClient;
-  http_headers _httpHeaders;
+    bool SetAPIKey(const string &key);
+
+  private:
+    bool IsInit() const { return _init; }
+
+    // Move GET Internally
+    pplx::task<string> Get(const string &endpoint);
+
+  private:
+    bool _init = false;
+    string _apiKey;
+    string _baseURL = kDefaultFugleMarketDataAPI;
+    http_client _httpClient;
+    http_headers _httpHeaders;
 };
 } // namespace fugle_realtime

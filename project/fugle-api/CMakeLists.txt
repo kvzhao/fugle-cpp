@@ -36,8 +36,6 @@ target_include_directories(
     ${TARGET_INCLUDE_FOLDER}
 )
 
-file(COPY ${TARGET_INCLUDE_FOLDER} DESTINATION ${TARGET_EXPORT_FOLDER})
-
 target_link_libraries(
     ${TARGET_NAME}
     spdlog

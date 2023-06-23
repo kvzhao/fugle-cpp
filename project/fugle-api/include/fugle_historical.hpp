@@ -7,12 +7,13 @@
 namespace fugle_realtime {
 
 class FugleHistorical : public FugleHttpClientBase {
-public:
-  FugleHistorical(const string &key);
+  public:
+    FugleHistorical();
 
-  HistoricalChandlesResponse Candles(const HistoricalChandlesParameter &param);
+    HistoricalChandlesResponse
+    Candles(const HistoricalChandlesParameter &param);
 
-private:
+  private:
 };
 
 } // namespace fugle_realtime

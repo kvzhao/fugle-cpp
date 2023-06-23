@@ -7,20 +7,20 @@
 namespace fugle_realtime {
 
 class FugleIntraday : public FugleHttpClientBase {
-public:
-  FugleIntraday(const string &key);
+  public:
+    FugleIntraday();
 
-  TickersResponse Tickers(const TickersParameter &param);
+    TickersResponse Tickers(const TickersParameter &param);
 
-  VolumeResponse Volumes(const VolumeParameter &param);
+    VolumeResponse Volumes(const VolumeParameter &param);
 
-  QuoteResponse Quote(const QuoteParameter &param);
+    QuoteResponse Quote(const QuoteParameter &param);
 
-  TradesResponse Trades(const TradesParameter &param);
+    TradesResponse Trades(const TradesParameter &param);
 
-  ChandlesResponse Candles(const ChandlesParameter &param);
+    ChandlesResponse Candles(const ChandlesParameter &param);
 
-private:
+  private:
 };
 
 } // namespace fugle_realtime

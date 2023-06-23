@@ -1,6 +1,6 @@
 set(TARGET_NAME testbed)
 
-# set(TARGET_INCLUDE_FOLDER ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(TARGET_INCLUDE_FOLDER ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(TARGET_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/testbed_fugle_api.cpp)
 
 add_executable(${TARGET_NAME} ${TARGET_SOURCES})
@@ -10,12 +10,9 @@ target_compile_options(${TARGET_NAME} PRIVATE ${compiler_options})
 target_link_options(${TARGET_NAME} PRIVATE ${linker_flags})
 
 target_include_directories(${TARGET_NAME}
-
-    # PUBLIC
     PRIVATE
-    ${CMAKE_BINARY_DIR}/export_libs/include
-
-    # Any other extra include required
+    ${TARGET_INCLUDE_FOLDER}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../fugle-api/include
 )
 
 set_target_properties(${TARGET_NAME} PROPERTIES
