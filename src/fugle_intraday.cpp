@@ -1,5 +1,4 @@
 
-#include "str_utils.hpp"
 #include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 #include <string>
@@ -8,6 +7,7 @@
 #include "fugle_common_data.hpp"
 #include "fugle_intraday.hpp"
 #include "fugle_intraday_data.hpp"
+#include "str_utils.hpp"
 
 using namespace std;
 using namespace fugle_realtime;
