@@ -52,10 +52,10 @@ add_subdirectory(thirdparty/TermOx EXCLUDE_FROM_ALL)
 file(
     GLOB_RECURSE
     SOURCES
-    "src/*.cpp"
+    "project/*.cpp"
 )
 
-include_directories(src)
+include_directories(project)
 
 add_executable(
     ${PROJECT_NAME}
