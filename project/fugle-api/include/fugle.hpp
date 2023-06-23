@@ -5,12 +5,10 @@
 #include "fugle_api_list.hpp"
 #include "fugle_client_base.hpp"
 #include "fugle_common_data.hpp"
-
-#include "fugle_intraday.hpp"
-#include "fugle_intraday_data.hpp"
-
-#include "fugle_snapshot.hpp"
-#include "fugle_snapshot_data.hpp"
-
 #include "fugle_historical.hpp"
 #include "fugle_historical_data.hpp"
+#include "fugle_intraday.hpp"
+#include "fugle_intraday_data.hpp"
+#include "fugle_snapshot.hpp"
+#include "fugle_snapshot_data.hpp"
+#include "str_utils.hpp"
