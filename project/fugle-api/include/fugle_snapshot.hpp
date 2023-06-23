@@ -8,16 +8,16 @@
 namespace fugle_realtime {
 
 class FugleSnapshot : public FugleHttpClientBase {
-public:
-  FugleSnapshot();
+  public:
+    FugleSnapshot();
 
-  ActivesResponse Actives(const ActivesParameter &param);
+    ActivesResponse Actives(const ActivesParameter &param);
 
-  MoversResponse Movers(const MoversParameter &param);
+    MoversResponse Movers(const MoversParameter &param);
 
-  QuotesResponse Quotes(const QuotesParameter &param);
+    QuotesResponse Quotes(const QuotesParameter &param);
 
-private:
+  private:
 };
 
 } // namespace fugle_realtime

@@ -16,9 +16,9 @@ static const std::vector<std::string> kFugleAPIList = {
     "/historical/stats/{symbol}"};
 
 inline int ShowAPIs() {
-  for (const auto &s : kFugleAPIList) {
-    spdlog::info(s);
-  }
-  return 0;
+    for (const auto &s : kFugleAPIList) {
+        spdlog::info(s);
+    }
+    return 0;
 }
-}
+} // namespace fugle_realtime

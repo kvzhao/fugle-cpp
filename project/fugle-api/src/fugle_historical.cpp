@@ -19,34 +19,34 @@ FugleHistorical::FugleHistorical()
 HistoricalChandlesResponse
 FugleHistorical::Candles(const HistoricalChandlesParameter &param) {
 
-  string symbol = param.symbol;
-  string resquest = joinWithSlash({kChandles, symbol});
+    string symbol = param.symbol;
+    string resquest = joinWithSlash({kChandles, symbol});
 
-  std::map<std::string, std::string> queryParams;
-  // TODO: Use CandleFeild
-  queryParams[kFields] = param.fields;
-  queryParams[kTimeFrame] = sChandleTimeFrame.at(param.timeframe);
+    std::map<std::string, std::string> queryParams;
+    // TODO: Use CandleFeild
+    queryParams[kFields] = param.fields;
+    queryParams[kTimeFrame] = sChandleTimeFrame.at(param.timeframe);
 
-  if (param.from.isValid()) {
-    queryParams[kFrom] = formatDate(param.from);
-  }
+    if (param.from.isValid()) {
+        queryParams[kFrom] = formatDate(param.from);
+    }
 
-  if (param.to.isValid()) {
-    queryParams[kTo] = formatDate(param.to);
-  }
+    if (param.to.isValid()) {
+        queryParams[kTo] = formatDate(param.to);
+    }
 
-  resquest = buildUrlWithQueryParams(resquest, queryParams);
-  spdlog::debug("resquest {}", resquest);
+    resquest = buildUrlWithQueryParams(resquest, queryParams);
+    spdlog::debug("resquest {}", resquest);
 
-  string response = FugleHttpClientBase::SimpleGet(resquest);
+    string response = FugleHttpClientBase::SimpleGet(resquest);
 
-  auto jsonFormat = nlohmann::json::parse(response);
-  HistoricalChandlesResponse candlesResp;
-  try {
-    jsonFormat.get_to(candlesResp);
-  } catch (const std::exception &ex) {
-    spdlog::error(ex.what());
-  }
+    auto jsonFormat = nlohmann::json::parse(response);
+    HistoricalChandlesResponse candlesResp;
+    try {
+        jsonFormat.get_to(candlesResp);
+    } catch (const std::exception &ex) {
+        spdlog::error(ex.what());
+    }
 
-  return candlesResp;
+    return candlesResp;
 }
