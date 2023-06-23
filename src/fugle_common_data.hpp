@@ -1,7 +1,10 @@
 #pragma once
 
+#include <chrono>
+#include <iomanip>
 #include <map>
 #include <nlohmann/json.hpp>
+#include <sstream>
 #include <string>
 
 using namespace nlohmann;
@@ -48,15 +51,36 @@ struct CandleData {
 template <typename BasicJsonType>
 inline void from_json(const BasicJsonType &j, CandleData &data) {
   j.at("date").get_to(data.date);
-  j.at("open").get_to(data.open);
-  j.at("close").get_to(data.close);
-  j.at("high").get_to(data.high);
-  j.at("low").get_to(data.low);
-  j.at("volume").get_to(data.volume);
+  if (j.count("open")) {
+    j.at("open").get_to(data.open);
+  }
+  if (j.count("close")) {
+    j.at("close").get_to(data.close);
+  }
+  if (j.count("high")) {
+    j.at("high").get_to(data.high);
+  }
+  if (j.count("low")) {
+    j.at("low").get_to(data.low);
+  }
+  if (j.count("volume")) {
+    j.at("volume").get_to(data.volume);
+  }
   if (j.count("average")) {
     j.at("average").get_to(data.average);
   }
 }
+
+// TODO: not so useful
+enum class CandleFeild : uint8_t {
+  OPEN,
+  HIGH,
+  LOW,
+  CLOSE,
+  VOLUME,
+  TUNROVER,
+  CHANGE
+};
 
 enum class CandleTimeFrame : uint8_t {
   K_1_MIN,
@@ -77,5 +101,35 @@ const static std::map<CandleTimeFrame, string> sChandleTimeFrame = {
     {CandleTimeFrame::K_DAY, "D"},     {CandleTimeFrame::K_WEEK, "W"},
     {CandleTimeFrame::K_MONTH, "M"},
 };
+
+struct Date {
+  Date(int y, int m, int d) : year(y), month(m), day(d){};
+  int year;
+  int month;
+  int day;
+};
+
+inline std::string formatDate(const Date &date) {
+  std::stringstream ss;
+  ss << std::setfill('0') << date.year << "-" << std::setw(2) << date.month
+     << "-" << std::setw(2) << date.day;
+  return ss.str();
+}
+
+inline Date getToday() {
+
+  auto currentTime = std::chrono::system_clock::now();
+
+  std::time_t currentTimeStamp =
+      std::chrono::system_clock::to_time_t(currentTime);
+
+  std::tm *localTime = std::localtime(&currentTimeStamp);
+
+  int year = localTime->tm_year + 1900;
+  int month = localTime->tm_mon + 1;
+  int day = localTime->tm_mday;
+
+  return Date{year, month, day};
+}
 
 } // namespace fugle_realtime
