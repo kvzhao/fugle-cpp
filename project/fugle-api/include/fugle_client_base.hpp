@@ -21,10 +21,6 @@ const static string kDefaultFugleMarketDataAPI =
     "https://api.fugle.tw/marketdata/v1.0/stock";
 namespace fugle_realtime {
 
-// intraday, snapshot, historical
-
-// promoted to base class
-
 class FugleHttpClientBase {
   public:
     FugleHttpClientBase();
