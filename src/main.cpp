@@ -1,21 +1,22 @@
+#include "CLI/CLI.hpp"
+
+#include "fugle.hpp"
+#include "str_utils.hpp"
+
+#include <SQLiteCpp/SQLiteCpp.h>
+
 #include <cpprest/filestream.h>
 #include <cpprest/http_client.h>
 #include <cpprest/json.h>
-
 #include <spdlog/spdlog.h>
 
-#include "CLI/CLI.hpp"
+#include <tabulate/table.hpp>
 
-#include "fugle_api_list.hpp"
-#include "fugle_client_base.hpp"
-#include "fugle_intraday.hpp"
-#include "fugle_intraday_data.hpp"
-
-// For test
-#include <SQLiteCpp/SQLiteCpp.h>
+#include <iostream>
 
 using namespace std;
 using namespace fugle_realtime;
+using namespace tabulate;
 
 struct Args {
   string filePath = "api_key.txt";
@@ -64,50 +65,109 @@ int main(int argc, char **argv) {
 
   FugleHttpClientBase fugleClient(apiKey);
   FugleIntraday intraday(apiKey);
+  FugleSnapshot snapshot(apiKey);
 
   if (args.endpoint.empty()) {
-    auto vol = intraday.Volumes({.symbol = args.symbol});
-    spdlog::info("vol.symbol {}", vol.symbol);
-    spdlog::info("vol.date {}", vol.date);
-    for (const auto &data : vol.data) {
-      spdlog::info("price = {} @ volume = {}, ask/bid = ({}, {})", data.price,
-                   data.volume, data.volumeAtAsk, data.volumeAtBid);
+
+    auto actives = snapshot.Actives(
+        {.market = MarketType::TSE, .trade = TradeType::VALUE});
+
+    tabulate::Table table;
+    table.add_row({"Rank", "Symbol", "Value", "Volume", "Change", "Name"});
+    table.format().multi_byte_characters(true);
+
+    uint32_t topStocks = std::min(100, (int)actives.data.size());
+    for (uint32_t i = 0; i < topStocks; ++i) {
+      uint32_t rowIndex = i + 1;
+      const auto &data = actives.data[i];
+      auto valueStr = floatToString(data.tradeValue / 1e8);
+      table.add_row({
+          to_string(rowIndex),
+          data.symbol,
+          valueStr,
+          to_string(data.tradeVolume),
+          floatToString(data.change),
+          data.name,
+      });
+      if (data.change > 0) {
+        table[rowIndex][4].format().font_background_color(Color::red);
+      } else {
+        table[rowIndex][4].format().font_background_color(Color::green);
+      }
     }
 
-    auto quote = intraday.Quote({.symbol = args.symbol});
-    spdlog::info("quote.name {}", quote.name);
-    spdlog::info("quote.lastPrice {}", quote.lastPrice);
-    spdlog::info("quote.total.tradeValue {}", quote.total.tradeValue);
-    spdlog::info("quote.total.tradeVolume {}", quote.total.tradeVolume);
-    spdlog::info("quote.total.tradeVolumeAtAsk {}",
-                 quote.total.tradeVolumeAtAsk);
-    spdlog::info("quote.total.tradeVolumeAtBid {}",
-                 quote.total.tradeVolumeAtBid);
+    cout << table << endl;
 
-    auto trades = intraday.Trades({.symbol = args.symbol});
+    auto movers = snapshot.Movers({
+        .market = MarketType::TSE,
+        .direction = MoveDirectionType::UP,
+        .gte = 5,
+    });
 
-    for (const auto &data : trades.data) {
-      spdlog::debug("trade p / v = {} / {} ", data.price, data.volume);
+    for (const auto &data : movers.data) {
+      spdlog::info("{} = {} -> {}", data.name, data.openPrice, data.closePrice);
     }
 
-    auto candles = intraday.Candles(
-        {.symbol = args.symbol, .timeFrame = CandleTimeFrame::K_10_MIN});
+    auto quotes = snapshot.Quotes({
+        .market = MarketType::TSE,
+    });
 
-    for (const auto &data : candles.data) {
-      spdlog::debug("candle {}, {}, {}, {} ", data.open, data.high, data.low,
-                    data.close);
-    }
+    // for (const auto &data : tradeData) {
+    //   table.add_row({data.name, std::to_string(data.change),
+    //                  std::to_string(data.changePercent),
+    //                  std::to_string(data.tradeValue)});
+    // }
 
-    auto tickers = intraday.Tickers({.type = TickerType::EQUITY,
-                                     .exchange = ExchangeType::TWSE,
-                                     .market = MarketType::TSE});
+    // auto vol = intraday.Volumes({.symbol = args.symbol});
+    // spdlog::info("vol.symbol {}", vol.symbol);
+    // spdlog::info("vol.date {}", vol.date);
+    // for (const auto &data : vol.data) {
+    //   spdlog::info("price = {} @ volume = {}, ask/bid = ({}, {})",
+    //   data.price,
+    //                data.volume, data.volumeAtAsk, data.volumeAtBid);
+    // }
 
-    for (const auto &ticker : tickers.data) {
-      spdlog::debug("{} {}", ticker.symbol, ticker.name);
-    }
+    // auto quote = intraday.Quote({.symbol = args.symbol});
+    // spdlog::info("quote.name {}", quote.name);
+    // spdlog::info("quote.lastPrice {}", quote.lastPrice);
+    // spdlog::info("quote.total.tradeValue {}", quote.total.tradeValue);
+    // spdlog::info("quote.total.tradeVolume {}", quote.total.tradeVolume);
+    // spdlog::info("quote.total.tradeVolumeAtAsk {}",
+    //              quote.total.tradeVolumeAtAsk);
+    // spdlog::info("quote.total.tradeVolumeAtBid {}",
+    //              quote.total.tradeVolumeAtBid);
+
+    // auto trades = intraday.Trades({.symbol = args.symbol});
+
+    // for (const auto &data : trades.data) {
+    //   spdlog::debug("trade p / v = {} / {} ", data.price, data.volume);
+    // }
+
+    // auto candles = intraday.Candles(
+    //     {.symbol = args.symbol, .timeFrame = CandleTimeFrame::K_10_MIN});
+
+    // for (const auto &data : candles.data) {
+    //   spdlog::debug("candle {}, {}, {}, {} ", data.open, data.high, data.low,
+    //                 data.close);
+    // }
+
+    // auto tickers = intraday.Tickers({.type = TickerType::EQUITY,
+    //                                  .exchange = ExchangeType::TWSE,
+    //                                  .market = MarketType::TSE});
+
+    // for (const auto &ticker : tickers.data) {
+    //   spdlog::debug("{} {}", ticker.symbol, ticker.name);
+    // }
+    // spdlog::info("# of tickers {}", tickers.data.size());
 
   } else {
-    string request = args.endpoint + "/" + args.symbol;
+    string request;
+
+    if (!args.symbol.empty()) {
+      request = joinWithSlash({args.endpoint, args.symbol});
+    } else {
+      request = args.endpoint;
+    }
     auto response = fugleClient.SimpleGet(request);
     spdlog::info("Response: {}", response);
   }

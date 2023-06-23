@@ -1,6 +1,6 @@
 #pragma once
 
-#include "fugle_client_base.hpp"
+#include "fugle_common_data.hpp"
 #include <map>
 #include <nlohmann/json.hpp>
 #include <string>
@@ -19,9 +19,6 @@ const static string kCandles = "candles";
 const static string kTrades = "trades";
 const static string kVolumes = "volumes";
 const static string kTimeFrame = "timeframe";
-const static string kExchange = "exchange";
-const static string kType = "type";
-const static string kMarket = "market";
 
 struct VolumeParameter {
   string symbol;
@@ -278,24 +275,6 @@ inline void from_json(const BasicJsonType &j, ChandlesResponse &data) {
   j.at("data").get_to(data.data);
 }
 
-enum class TickerType : uint8_t { EQUITY, INDEX, WARRANT, ODDLOT };
-const static std::map<TickerType, string> sTickerType = {
-    {TickerType::EQUITY, "EQUITY"},
-    {TickerType::INDEX, "INDEX"},
-    {TickerType::WARRANT, "WARRANT"},
-    {TickerType::ODDLOT, "ODDLOT"}};
-
-enum class ExchangeType : uint8_t { TWSE, TPEx };
-const static std::map<ExchangeType, string> sExchangeType = {
-    {ExchangeType::TWSE, "TWSE"}, {ExchangeType::TPEx, "TPEx"}};
-
-enum class MarketType : uint8_t { TSE, OTC, ESB, TIB, PSB };
-const static std::map<MarketType, string> sMarketType = {
-    {MarketType::TSE, "TSE"},
-    {MarketType::OTC, "OTC"},
-    {MarketType::ESB, "ESB"},
-    {MarketType::TIB, "TIB"},
-    {MarketType::PSB, "PSB"}};
 struct TickersParameter {
   TickerType type = TickerType::EQUITY;
   ExchangeType exchange = ExchangeType::TWSE;
