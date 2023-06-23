@@ -98,6 +98,16 @@ int main(int argc, char **argv) {
 
     cout << table << endl;
 
+    auto movers = snapshot.Movers({
+        .market = MarketType::TSE,
+        .direction = MoveDirectionType::UP,
+        .gte = 5,
+    });
+
+    for (const auto &data : movers.data) {
+      spdlog::info("{} = {} -> {}", data.name, data.openPrice, data.closePrice);
+    }
+
     // for (const auto &data : tradeData) {
     //   table.add_row({data.name, std::to_string(data.change),
     //                  std::to_string(data.changePercent),

@@ -15,6 +15,8 @@ const static string kActives = "actives";
 const static string kQuotes = "quotes";
 const static string kMovers = "movers";
 const static string kTrade = "trade";
+const static string kChange = "change";
+const static string kDirection = "direction";
 
 enum class TradeType : uint8_t { VOLUME, VALUE };
 const static std::map<TradeType, std::string> sTradeType = {
@@ -85,6 +87,42 @@ inline void from_json(const BasicJsonType &j, ActivesResponse &data) {
   j.at("time").get_to(data.time);
   j.at("market").get_to(data.market);
   j.at("trade").get_to(data.trade);
+  j.at("data").get_to(data.data);
+}
+
+enum class MoveDirectionType : uint8_t {
+  UP,
+  DOWN,
+};
+const static std::map<MoveDirectionType, std::string> sMoveDirectionType = {
+    {MoveDirectionType::UP, "up"},
+    {MoveDirectionType::DOWN, "down"},
+};
+struct MoversParameter {
+  MarketType market = MarketType::TSE;
+  TradeType trade = TradeType::VALUE;
+  string change = "percent"; // percent or value
+  MoveDirectionType direction = MoveDirectionType::UP;
+  float gt = -1;
+  float lt = -1;
+  float gte = -1;
+  float lte = -1;
+  float eq = -1;
+};
+
+struct MoversResponse {
+  string date;
+  string time;
+  string market;
+  string change;
+  vector<ActiveTradeData> data;
+};
+template <typename BasicJsonType>
+inline void from_json(const BasicJsonType &j, MoversResponse &data) {
+  j.at("date").get_to(data.date);
+  j.at("time").get_to(data.time);
+  j.at("market").get_to(data.market);
+  j.at("change").get_to(data.change);
   j.at("data").get_to(data.data);
 }
 

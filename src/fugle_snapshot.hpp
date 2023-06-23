@@ -13,6 +13,8 @@ public:
 
   ActivesResponse Actives(const ActivesParameter &param);
 
+  MoversResponse Movers(const MoversParameter &param);
+
 private:
 };
 
