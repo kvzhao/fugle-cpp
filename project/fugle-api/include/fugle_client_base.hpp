@@ -27,20 +27,27 @@ namespace fugle_realtime {
 
 class FugleHttpClientBase {
 public:
-  FugleHttpClientBase(const string &key);
+ FugleHttpClientBase();
 
-  FugleHttpClientBase(const string &key, const string &url);
+ FugleHttpClientBase(const string &url);
 
-  string SimpleGet(const string &request);
+ FugleHttpClientBase(const string &key, const string &url);
+
+ string SimpleGet(const string &request);
+
+ bool SetAPIKey(const string &key);
 
 private:
-  // Move GET Internally
-  pplx::task<string> Get(const string &endpoint);
+ bool IsInit() const { return _init; }
+
+ // Move GET Internally
+ pplx::task<string> Get(const string &endpoint);
 
 private:
-  string _apiKey;
-  string _baseURL = kDefaultFugleMarketDataAPI;
-  http_client _httpClient;
-  http_headers _httpHeaders;
+ bool _init = false;
+ string _apiKey;
+ string _baseURL = kDefaultFugleMarketDataAPI;
+ http_client _httpClient;
+ http_headers _httpHeaders;
 };
 } // namespace fugle_realtime

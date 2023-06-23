@@ -1,36 +1,27 @@
-#include "CLI/CLI.hpp"
-
-#include "fugle.hpp"
-#include "str_utils.hpp"
-
 #include <SQLiteCpp/SQLiteCpp.h>
-
-#include <cpprest/filestream.h>
-#include <cpprest/http_client.h>
-#include <cpprest/json.h>
 #include <spdlog/spdlog.h>
 
+#include <iostream>
 #include <tabulate/table.hpp>
 
-#include <iostream>
+#include "CLI/CLI.hpp"
+#include "fugle.hpp"
 
 using namespace std;
 using namespace fugle_realtime;
 using namespace tabulate;
 
 struct Args {
-  string filePath = "api_key.txt";
-  string endpoint;
-  string symbol = "2330";
-  bool showApiList = false;
-  bool debug = false;
+    string endpoint;
+    string symbol = "2330";
+    bool showApiList = false;
+    bool debug = false;
 };
 
 int main(int argc, char **argv) {
   CLI::App app{"Fugle Terminal"};
 
   Args args;
-  app.add_option("-f,--api-file", args.filePath, "Path to api key");
   app.add_option("-s,--stock-symbol", args.symbol, "symbol");
   app.add_option("-e,--endpoint", args.endpoint, "endpoint");
   app.add_flag("-l,--show-api-list", args.showApiList, "print Fugle APIs");
@@ -54,19 +45,10 @@ int main(int argc, char **argv) {
     spdlog::debug("Set to debug log");
   }
 
-  std ::ifstream apiKeyFile(args.filePath);
-  if (!apiKeyFile.is_open()) {
-    spdlog::error("Can not open the api key file");
-    return 1;
-  }
-
-  string apiKey;
-  getline(apiKeyFile, apiKey);
-
-  FugleHttpClientBase fugleClient(apiKey);
-  FugleIntraday intraday(apiKey);
-  FugleSnapshot snapshot(apiKey);
-  FugleHistorical historical(apiKey);
+  FugleHttpClientBase fugleClient;
+  FugleIntraday intraday;
+  FugleSnapshot snapshot;
+  FugleHistorical historical;
 
   if (args.endpoint.empty()) {
 
@@ -124,12 +106,6 @@ int main(int argc, char **argv) {
                    kbar.volume);
     }
 
-    // for (const auto &data : tradeData) {
-    //   table.add_row({data.name, std::to_string(data.change),
-    //                  std::to_string(data.changePercent),
-    //                  std::to_string(data.tradeValue)});
-    // }
-
     // auto vol = intraday.Volumes({.symbol = args.symbol});
     // spdlog::info("vol.symbol {}", vol.symbol);
     // spdlog::info("vol.date {}", vol.date);
@@ -155,10 +131,10 @@ int main(int argc, char **argv) {
     //   spdlog::debug("trade p / v = {} / {} ", data.price, data.volume);
     // }
 
-    // auto candles = intraday.Candles(
+    // auto intradyCandles = intraday.Candles(
     //     {.symbol = args.symbol, .timeFrame = CandleTimeFrame::K_10_MIN});
 
-    // for (const auto &data : candles.data) {
+    // for (const auto &data : intradyCandles.data) {
     //   spdlog::debug("candle {}, {}, {}, {} ", data.open, data.high, data.low,
     //                 data.close);
     // }

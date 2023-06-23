@@ -14,9 +14,7 @@ namespace fugle_realtime {
 const static std::string kExchange = "exchange";
 const static std::string kType = "type";
 const static std::string kMarket = "market";
-const static string kTimeFrame = "timeframe";
-
-inline std::string sBoolean(bool isTrue) { return isTrue ? "true" : "false"; }
+const static std::string kTimeFrame = "timeframe";
 
 enum class TickerType : uint8_t { EQUITY, INDEX, WARRANT, ODDLOT };
 const static std::map<TickerType, std::string> sTickerType = {

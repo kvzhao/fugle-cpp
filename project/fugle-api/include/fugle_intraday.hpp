@@ -8,7 +8,7 @@ namespace fugle_realtime {
 
 class FugleIntraday : public FugleHttpClientBase {
 public:
-  FugleIntraday(const string &key);
+  FugleIntraday();
 
   TickersResponse Tickers(const TickersParameter &param);
 

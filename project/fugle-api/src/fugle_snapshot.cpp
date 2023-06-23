@@ -11,9 +11,9 @@
 using namespace std;
 using namespace fugle_realtime;
 
-FugleSnapshot::FugleSnapshot(const string &key)
+FugleSnapshot::FugleSnapshot()
     : FugleHttpClientBase(
-          key, joinWithSlash({kDefaultFugleMarketDataAPI, kSnapshot})) {}
+          joinWithSlash({kDefaultFugleMarketDataAPI, kSnapshot})) {}
 
 ActivesResponse FugleSnapshot::Actives(const ActivesParameter &param) {
 

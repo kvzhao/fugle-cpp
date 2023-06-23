@@ -12,9 +12,9 @@
 using namespace std;
 using namespace fugle_realtime;
 
-FugleIntraday::FugleIntraday(const string &key)
+FugleIntraday::FugleIntraday()
     : FugleHttpClientBase(
-          key, joinWithSlash({kDefaultFugleMarketDataAPI, kIntrady})) {}
+          joinWithSlash({kDefaultFugleMarketDataAPI, kIntrady})) {}
 
 VolumeResponse FugleIntraday::Volumes(const VolumeParameter &param) {
   string symbol = param.symbol;

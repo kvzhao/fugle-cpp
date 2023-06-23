@@ -9,7 +9,7 @@ namespace fugle_realtime {
 
 class FugleSnapshot : public FugleHttpClientBase {
 public:
-  FugleSnapshot(const string &key);
+  FugleSnapshot();
 
   ActivesResponse Actives(const ActivesParameter &param);
 

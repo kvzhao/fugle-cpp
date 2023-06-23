@@ -33,4 +33,8 @@ brew install cpprestsdk
 
 The API Key file is needed.
 Please apply API key from official website: https://developer.fugle.tw/docs/key/
-Save your key in `api_key.txt`. 
+
+Set the key with environment variable or save to bashrc.
+```bash
+export FUGLE_API_KEY='...'
+```

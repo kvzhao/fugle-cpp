@@ -12,9 +12,9 @@
 using namespace std;
 using namespace fugle_realtime;
 
-FugleHistorical::FugleHistorical(const string &key)
+FugleHistorical::FugleHistorical()
     : FugleHttpClientBase(
-          key, joinWithSlash({kDefaultFugleMarketDataAPI, kHistorical})) {}
+          joinWithSlash({kDefaultFugleMarketDataAPI, kHistorical})) {}
 
 HistoricalChandlesResponse
 FugleHistorical::Candles(const HistoricalChandlesParameter &param) {

@@ -8,9 +8,9 @@ namespace fugle_realtime {
 
 class FugleHistorical : public FugleHttpClientBase {
 public:
-  FugleHistorical(const string &key);
+ FugleHistorical();
 
-  HistoricalChandlesResponse Candles(const HistoricalChandlesParameter &param);
+ HistoricalChandlesResponse Candles(const HistoricalChandlesParameter &param);
 
 private:
 };

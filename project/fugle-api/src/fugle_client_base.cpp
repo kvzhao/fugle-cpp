@@ -5,16 +5,40 @@
 
 using namespace fugle_realtime;
 
-FugleHttpClientBase::FugleHttpClientBase(const string &key)
-    : _apiKey(key), _httpClient(U(_baseURL)) {
-  _httpHeaders.add(kXAPIKEY, _apiKey);
-  spdlog::debug("set base url {}", _baseURL);
+std::string GetFugleAPIKey() {
+  std::string key;
+  if (const char *env_p = std::getenv("FUGLE_API_KEY")) {
+    key = std::string{env_p};
+  }
+  spdlog::debug("Get fulge api key from env : {}", key);
+  return key;
+}
+
+FugleHttpClientBase::FugleHttpClientBase() : _httpClient(U(_baseURL)) {
+  SetAPIKey(GetFugleAPIKey());
+  spdlog::debug("set default url {}, and use default key", _baseURL);
+}
+
+FugleHttpClientBase::FugleHttpClientBase(const string &url)
+    : _baseURL(url), _httpClient(U(_baseURL)) {
+  SetAPIKey(GetFugleAPIKey());
+  spdlog::debug("set base url {}, and use default key", _baseURL);
 }
 
 FugleHttpClientBase::FugleHttpClientBase(const string &key, const string &url)
-    : _apiKey(key), _baseURL(url), _httpClient(U(_baseURL)) {
+    : _baseURL(url), _httpClient(U(_baseURL)) {
+  SetAPIKey(key);
+  spdlog::debug("set url {}, and given api key", _baseURL);
+}
+
+bool FugleHttpClientBase::SetAPIKey(const string &key) {
+  if (_httpHeaders.has(kXAPIKEY)) {
+    _httpHeaders.remove(kXAPIKEY);
+  }
+  _apiKey = key;
   _httpHeaders.add(kXAPIKEY, _apiKey);
-  spdlog::debug("set base url {}", _baseURL);
+  _init = true;
+  return true;
 }
 
 pplx::task<std::string> FugleHttpClientBase::Get(const std::string &endpoint) {
@@ -34,6 +58,9 @@ pplx::task<std::string> FugleHttpClientBase::Get(const std::string &endpoint) {
 }
 
 string FugleHttpClientBase::SimpleGet(const string &input) {
+  if (!this->IsInit()) {
+    throw std::runtime_error("client is not init.");
+  }
 
   auto request = addSlashIfNeeded(input);
   spdlog::debug("request : {}", request);
