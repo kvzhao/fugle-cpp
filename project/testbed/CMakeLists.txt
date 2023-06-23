@@ -12,12 +12,7 @@ target_link_options(${TARGET_NAME} PRIVATE ${linker_flags})
 target_include_directories(${TARGET_NAME}
 
     # PUBLIC
-
-    # $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/exports>
     PRIVATE
-
-    # ${TARGET_INCLUDE_FOLDER}
-    # ${CMAKE_CURRENT_SOURCE_DIR}/../hellolib/include
     ${CMAKE_BINARY_DIR}/export_libs/include
 
     # Any other extra include required
@@ -31,15 +26,10 @@ target_link_libraries(
     ${TARGET_NAME}
     spdlog
     nlohmann_json
-
     cpprestsdk::cpprest
-
-    # OpenSSL::SSL
-    # OpenSSL::Crypto
     tabulate
     CLI11::CLI11
     SQLiteCpp
     TermOx
-
     ${CMAKE_BINARY_DIR}/export_libs/libfugle.a
 )
