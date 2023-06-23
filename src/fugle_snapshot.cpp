@@ -80,3 +80,20 @@ MoversResponse FugleSnapshot::Movers(const MoversParameter &param) {
 
   return moversResp;
 }
+
+QuotesResponse FugleSnapshot::Quotes(const QuotesParameter &param) {
+  string resquest = joinWithSlash({kQuotes, sMarketType.at(param.market)});
+  spdlog::debug("resquest {}", resquest);
+
+  string response = FugleHttpClientBase::SimpleGet(resquest);
+
+  auto jsonFormat = nlohmann::json::parse(response);
+  QuotesResponse quotesResp;
+  try {
+    jsonFormat.get_to(quotesResp);
+  } catch (const std::exception &ex) {
+    spdlog::error(ex.what());
+  }
+
+  return quotesResp;
+}

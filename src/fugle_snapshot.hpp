@@ -15,6 +15,8 @@ public:
 
   MoversResponse Movers(const MoversParameter &param);
 
+  QuotesResponse Quotes(const QuotesParameter &param);
+
 private:
 };
 

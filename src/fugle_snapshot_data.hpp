@@ -126,4 +126,22 @@ inline void from_json(const BasicJsonType &j, MoversResponse &data) {
   j.at("data").get_to(data.data);
 }
 
+struct QuotesParameter {
+  MarketType market = MarketType::TSE;
+};
+
+struct QuotesResponse {
+  string date;
+  string time;
+  string market;
+  vector<ActiveTradeData> data;
+};
+template <typename BasicJsonType>
+inline void from_json(const BasicJsonType &j, QuotesResponse &data) {
+  j.at("date").get_to(data.date);
+  j.at("time").get_to(data.time);
+  j.at("market").get_to(data.market);
+  j.at("data").get_to(data.data);
+}
+
 } // namespace fugle_realtime

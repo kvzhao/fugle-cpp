@@ -108,6 +108,10 @@ int main(int argc, char **argv) {
       spdlog::info("{} = {} -> {}", data.name, data.openPrice, data.closePrice);
     }
 
+    auto quotes = snapshot.Quotes({
+        .market = MarketType::TSE,
+    });
+
     // for (const auto &data : tradeData) {
     //   table.add_row({data.name, std::to_string(data.change),
     //                  std::to_string(data.changePercent),
