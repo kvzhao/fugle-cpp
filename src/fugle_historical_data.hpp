@@ -12,8 +12,11 @@ using namespace nlohmann;
 namespace fugle_realtime {
 const static string kHistorical = "historical";
 const static string kChandles = "candles";
+const static string kFields = "fields";
+const static string kFrom = "from";
+const static string kTo = "to";
 
-struct ChandlesParameter {
+struct HistoricalChandlesParameter {
   string symbol;
   Date from;
   Date to;
@@ -22,7 +25,7 @@ struct ChandlesParameter {
   string fields = "open,high,low,close,volume,turnover,change";
 };
 
-struct ChandleResponse {
+struct HistoricalChandlesResponse {
   string symbol;
   string type;
   string market;
@@ -30,8 +33,8 @@ struct ChandleResponse {
   vector<CandleData> data;
 };
 template <typename BasicJsonType>
-inline void from_json(const BasicJsonType &j, ChandleResponse &data) {
-  j.at("date").get_to(data.date);
+inline void from_json(const BasicJsonType &j,
+                      HistoricalChandlesResponse &data) {
   j.at("symbol").get_to(data.symbol);
   j.at("type").get_to(data.type);
   j.at("market").get_to(data.market);

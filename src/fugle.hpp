@@ -11,3 +11,6 @@
 
 #include "fugle_snapshot.hpp"
 #include "fugle_snapshot_data.hpp"
+
+#include "fugle_historical.hpp"
+#include "fugle_historical_data.hpp"

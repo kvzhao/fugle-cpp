@@ -103,16 +103,26 @@ const static std::map<CandleTimeFrame, string> sChandleTimeFrame = {
 };
 
 struct Date {
-  Date(int y, int m, int d) : year(y), month(m), day(d){};
-  int year;
-  int month;
-  int day;
+  Date(){};
+  Date(uint32_t y, uint32_t m, uint32_t d) : year(y), month(m), day(d){};
+  uint32_t year = 0;
+  uint32_t month = 0;
+  uint32_t day = 0;
+  bool isValid() const {
+    bool notInit = (year == 0) && (month == 0) && (day == 0);
+
+    // TODO: do more check
+    bool valid = !notInit;
+
+    return valid;
+  }
 };
 
 inline std::string formatDate(const Date &date) {
   std::stringstream ss;
-  ss << std::setfill('0') << date.year << "-" << std::setw(2) << date.month
-     << "-" << std::setw(2) << date.day;
+  ss << std::setfill('0') << std::setw(4) << std::to_string(date.year) << "-"
+     << std::setw(2) << std::to_string(date.month) << "-" << std::setw(2)
+     << std::to_string(date.day);
   return ss.str();
 }
 
@@ -125,9 +135,9 @@ inline Date getToday() {
 
   std::tm *localTime = std::localtime(&currentTimeStamp);
 
-  int year = localTime->tm_year + 1900;
-  int month = localTime->tm_mon + 1;
-  int day = localTime->tm_mday;
+  uint32_t year = localTime->tm_year + 1900;
+  uint32_t month = localTime->tm_mon + 1;
+  uint32_t day = localTime->tm_mday;
 
   return Date{year, month, day};
 }

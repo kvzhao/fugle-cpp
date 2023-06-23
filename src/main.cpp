@@ -66,6 +66,7 @@ int main(int argc, char **argv) {
   FugleHttpClientBase fugleClient(apiKey);
   FugleIntraday intraday(apiKey);
   FugleSnapshot snapshot(apiKey);
+  FugleHistorical historical(apiKey);
 
   if (args.endpoint.empty()) {
 
@@ -111,6 +112,17 @@ int main(int argc, char **argv) {
     auto quotes = snapshot.Quotes({
         .market = MarketType::TSE,
     });
+
+    auto candles = historical.Candles({.symbol = args.symbol,
+                                       .from = Date{2023, 5, 19},
+                                       .to = Date{2023, 5, 26},
+                                       .timeframe = CandleTimeFrame::K_DAY});
+
+    for (const auto &kbar : candles.data) {
+      spdlog::info("[{}] open {}, close {}, high {}, low {}, volume {}",
+                   kbar.date, kbar.open, kbar.close, kbar.high, kbar.close,
+                   kbar.volume);
+    }
 
     // for (const auto &data : tradeData) {
     //   table.add_row({data.name, std::to_string(data.change),
