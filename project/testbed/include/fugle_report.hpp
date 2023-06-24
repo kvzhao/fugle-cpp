@@ -24,7 +24,12 @@ struct CompareTradeVolume {
     }
 };
 
-class FugleReport {
+struct TAWeekyReport {
+    bool is20Percent = false;
+    float volRation = 1.0;
+};
+
+class FugleWeeklyReport {
   public:
     static vector<string>
     TradingValueRankingReport(const vector<MarketType> &markets,
@@ -32,6 +37,8 @@ class FugleReport {
     // todo: trading volume
 
     static bool Is20PercentUpLastWeek(const string &symbol);
+
+    static TAWeekyReport TechnicalAnalysisWeekly(const string &symbol);
 };
 
 } // namespace fugle_app

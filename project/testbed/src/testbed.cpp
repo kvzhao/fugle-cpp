@@ -37,10 +37,8 @@ int main(int argc, char **argv) {
         spdlog::debug("Set to debug log");
     }
 
-    auto stocks = FugleReport::TradingValueRankingReport(
-        {MarketType::TSE, MarketType::OTC});
-
-    // FugleReport::TopPerformerLastWeek(stocks);
+    auto stocks = FugleWeeklyReport::TradingValueRankingReport(
+        {MarketType::TSE, MarketType::OTC}, 100);
 
     // auto movers = snapshot.Movers({
     //     .market = MarketType::TSE,

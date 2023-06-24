@@ -19,9 +19,10 @@ using namespace fugle_realtime;
 using namespace fugle_app;
 
 vector<string>
-FugleReport::TradingValueRankingReport(const vector<MarketType> &markets,
-                                       uint32_t numStock) {
+FugleWeeklyReport::TradingValueRankingReport(const vector<MarketType> &markets,
+                                             uint32_t numStock) {
     FugleSnapshot snapshot;
+    FugleIntraday intraday;
 
     // TODO: safety check of numStock
 
@@ -57,17 +58,14 @@ FugleReport::TradingValueRankingReport(const vector<MarketType> &markets,
 
     // Ranking of Transaction Values
 
-    cout << date << " Market : " << joinWith(marketStr, ", ") << endl;
+    cout << date << " - Market (" << joinWith(marketStr, ", ") << ")" << endl;
     tabulate::Table table;
-    table.add_row({"Rank", "Symbol", "Value", "Volume", "Change", "Change (%)",
-                   "Name", "20% UP"});
+    table.add_row({"Rank", "Symbol", "Value (E)", "Vol Ratio", "Change",
+                   "Change (%)", "Name", "20% UP", "Sector"});
     table.format().multi_byte_characters(true);
 
     vector<string> sortedStockSymbols;
-    progressbar bar(numStock);
     for (uint32_t i = 0; i < numStock; ++i) {
-        bar.update();
-
         const auto &data = sortedTradeData[i];
 
         uint32_t rowIndex = i + 1;
@@ -78,16 +76,24 @@ FugleReport::TradingValueRankingReport(const vector<MarketType> &markets,
 
         bool isHitPriceLimit = std::abs(changePercent) > 9.5;
 
-        bool is20Up = FugleReport::Is20PercentUpLastWeek(data.symbol);
-        string is20UpStr = is20Up ? "Yes" : "";
+        auto taReport = TechnicalAnalysisWeekly(data.symbol);
+        string is20UpStr = taReport.is20Percent ? "Yes" : "";
 
-        if (is20Up) {
+        if (taReport.is20Percent) {
             // TODO: is it first breakthrough?
         }
 
-        table.add_row({to_string(rowIndex), data.symbol, valueStr,
-                       to_string(data.tradeVolume), floatToString(data.change),
-                       floatToString(changePercent), data.name, is20UpStr});
+        string industry = intraday.Ticker({.symbol = data.symbol}).industry;
+        string sector = "";
+        if (tickerIndustryToSector.count(industry))
+            sector = tickerIndustryToSector.at(industry);
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+        string volRatio = "x " + floatToString(taReport.volRation);
+        table.add_row({to_string(rowIndex), data.symbol, valueStr, volRatio,
+                       floatToString(data.change), floatToString(changePercent),
+                       data.name, is20UpStr, sector});
 
         tabulate::Color color =
             data.change > 0 ? tabulate::Color::red : tabulate::Color::green;
@@ -108,7 +114,7 @@ FugleReport::TradingValueRankingReport(const vector<MarketType> &markets,
     return sortedStockSymbols;
 }
 
-bool FugleReport::Is20PercentUpLastWeek(const string &symbol) {
+TAWeekyReport FugleWeeklyReport::TechnicalAnalysisWeekly(const string &symbol) {
     const float topPerformancePercentage = 20.0f;
     auto dateToday = getToday();
     auto dateLastWeek = subtractDays(dateToday, 14);
@@ -127,20 +133,20 @@ bool FugleReport::Is20PercentUpLastWeek(const string &symbol) {
     }
     sort(sortedDates.begin(), sortedDates.end());
 
+    TAWeekyReport result;
     for (size_t i = 1; i < sortedDates.size(); ++i) {
         auto lastDate = sortedDates[i - 1];
         auto currentDate = sortedDates[i];
         auto last = candlesticks[lastDate];
         auto current = candlesticks[currentDate];
         float changePercent = (current.close - last.close) / last.close * 100.0;
+        float volRatio = static_cast<float>(current.volume) / last.volume;
+        result.volRation = volRatio;
 
         if (changePercent >= topPerformancePercentage) {
-            spdlog::debug("{} {} to {}, last close {}, current close {} => {}%",
-                          symbol, lastDate, currentDate, last.close,
-                          current.close, floatToString(changePercent));
-            return true;
+            result.is20Percent = true;
         }
     }
 
-    return false;
+    return result;
 }
