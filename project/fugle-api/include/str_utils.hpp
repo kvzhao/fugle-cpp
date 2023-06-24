@@ -16,17 +16,22 @@ inline std::string addSlashIfNeeded(const std::string &input) {
     return result;
 }
 
-inline std::string joinWithSlash(const std::vector<std::string> &strings) {
+inline std::string joinWith(const std::vector<std::string> &strings,
+                            const std::string &delim) {
     std::string result;
 
     for (const std::string &str : strings) {
         if (!result.empty()) {
-            result += "/";
+            result += delim;
         }
         result += str;
     }
 
     return result;
+}
+
+inline std::string joinWithSlash(const std::vector<std::string> &strings) {
+    return joinWith(strings, "/");
 }
 
 inline std::string

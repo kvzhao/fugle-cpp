@@ -116,12 +116,26 @@ struct Date {
     }
 };
 
+// Date Operation Functions
+
 inline std::string formatDate(const Date &date) {
     std::stringstream ss;
     ss << std::setfill('0') << std::setw(4) << std::to_string(date.year) << "-"
        << std::setw(2) << std::to_string(date.month) << "-" << std::setw(2)
        << std::to_string(date.day);
     return ss.str();
+}
+
+inline Date stringToDate(const std::string &dateString) {
+    std::istringstream iss(dateString);
+    std::string token;
+    std::getline(iss, token, '-');
+    uint32_t year = std::stoi(token);
+    std::getline(iss, token, '-');
+    uint32_t month = std::stoi(token);
+    std::getline(iss, token);
+    uint32_t day = std::stoi(token);
+    return Date(year, month, day);
 }
 
 inline Date getToday() {
@@ -138,6 +152,68 @@ inline Date getToday() {
     uint32_t day = localTime->tm_mday;
 
     return Date{year, month, day};
+}
+
+inline Date subtractDays(const Date &date, uint32_t numDays) {
+    uint32_t year = date.year;
+    uint32_t month = date.month;
+    uint32_t day = date.day;
+
+    while (numDays > 0) {
+        if (day > numDays) {
+            day -= numDays;
+            numDays = 0;
+        } else {
+            if (month == 1) {
+                month = 12;
+                year--;
+            } else {
+                month--;
+            }
+
+            uint32_t daysInPreviousMonth = 31;
+            if (month == 4 || month == 6 || month == 9 || month == 11) {
+                daysInPreviousMonth = 30;
+            } else if (month == 2) {
+                if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
+                    daysInPreviousMonth = 29;
+                } else {
+                    daysInPreviousMonth = 28;
+                }
+            }
+
+            day = daysInPreviousMonth - (numDays - day);
+            numDays -= day;
+        }
+    }
+
+    return Date(year, month, day);
+}
+
+inline Date subtractMonths(const Date &date, uint32_t numMonths) {
+    uint32_t year = date.year;
+    uint32_t month = date.month;
+    uint32_t day = date.day;
+
+    while (numMonths > 0) {
+        if (month > numMonths) {
+            month -= numMonths;
+            numMonths = 0;
+        } else {
+            if (year > 1) {
+                year--;
+                month = 12 - (numMonths - month) % 12;
+                if (month == 0) {
+                    month = 12;
+                }
+                numMonths -= month;
+            } else {
+                break;
+            }
+        }
+    }
+
+    return Date(year, month, day);
 }
 
 } // namespace fugle_realtime

@@ -127,3 +127,21 @@ TickersResponse FugleIntraday::Tickers(const TickersParameter &param) {
 
     return tickersResp;
 }
+
+TickerResponse FugleIntraday::Ticker(const TickerParameter &param) {
+    string symbol = param.symbol;
+    string resquest = joinWithSlash({kTicker, symbol});
+    spdlog::debug("resquest {}", resquest);
+
+    string response = FugleHttpClientBase::SimpleGet(resquest);
+
+    auto jsonFormat = nlohmann::json::parse(response);
+    TickerResponse tickerResp;
+    try {
+        jsonFormat.get_to(tickerResp);
+    } catch (const std::exception &ex) {
+        spdlog::error(ex.what());
+    }
+
+    return tickerResp;
+}

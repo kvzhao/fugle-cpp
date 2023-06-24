@@ -293,4 +293,177 @@ inline void from_json(const BasicJsonType &j, TickersResponse &data) {
     }
 };
 
+struct TickerParameter {
+    string symbol;
+    string type;
+};
+
+struct TickerResponse {
+    string date;
+    string type;
+    string exchange;
+    string market;
+    string symbol;
+    string name;
+    string industry;
+    string securityType;
+    float previousClose;
+    float referencePrice;
+    float limitUpPrice;
+    float limitDownPrice;
+    bool canDayTrade;
+    bool canBuyDayTrade;
+    bool canBelowFlatMarginShortSell;
+    bool canBelowFlatSBLShortSell;
+    bool isAttention;
+    bool isDisposition;
+    bool isUnusuallyRecommended;
+    bool isSpecificAbnormally;
+    uint32_t matchingInterval;
+    string securityStatus;
+    string tradingCurrency;
+};
+
+template <typename BasicJsonType>
+void from_json(const BasicJsonType &j, TickerResponse &data) {
+    if (j.count("date")) {
+        j.at("date").get_to(data.date);
+    }
+    if (j.count("type")) {
+        j.at("type").get_to(data.type);
+    }
+    if (j.count("exchange")) {
+        j.at("exchange").get_to(data.exchange);
+    }
+    if (j.count("market")) {
+        j.at("market").get_to(data.market);
+    }
+    if (j.count("symbol")) {
+        j.at("symbol").get_to(data.symbol);
+    }
+    if (j.count("name")) {
+        j.at("name").get_to(data.name);
+    }
+    if (j.count("industry")) {
+        j.at("industry").get_to(data.industry);
+    }
+    if (j.count("securityType")) {
+        j.at("securityType").get_to(data.securityType);
+    }
+    if (j.count("previousClose")) {
+        j.at("previousClose").get_to(data.previousClose);
+    }
+    if (j.count("referencePrice")) {
+        j.at("referencePrice").get_to(data.referencePrice);
+    }
+    if (j.count("limitUpPrice")) {
+        j.at("limitUpPrice").get_to(data.limitUpPrice);
+    }
+    if (j.count("limitDownPrice")) {
+        j.at("limitDownPrice").get_to(data.limitDownPrice);
+    }
+    if (j.count("canDayTrade")) {
+        j.at("canDayTrade").get_to(data.canDayTrade);
+    }
+    if (j.count("canBuyDayTrade")) {
+        j.at("canBuyDayTrade").get_to(data.canBuyDayTrade);
+    }
+    if (j.count("canBelowFlatMarginShortSell")) {
+        j.at("canBelowFlatMarginShortSell")
+            .get_to(data.canBelowFlatMarginShortSell);
+    }
+    if (j.count("canBelowFlatSBLShortSell")) {
+        j.at("canBelowFlatSBLShortSell").get_to(data.canBelowFlatSBLShortSell);
+    }
+    if (j.count("isAttention")) {
+        j.at("isAttention").get_to(data.isAttention);
+    }
+    if (j.count("isDisposition")) {
+        j.at("isDisposition").get_to(data.isDisposition);
+    }
+    if (j.count("isUnusuallyRecommended")) {
+        j.at("isUnusuallyRecommended").get_to(data.isUnusuallyRecommended);
+    }
+    if (j.count("isSpecificAbnormally")) {
+        j.at("isSpecificAbnormally").get_to(data.isSpecificAbnormally);
+    }
+    if (j.count("matchingInterval")) {
+        j.at("matchingInterval").get_to(data.matchingInterval);
+    }
+    if (j.count("securityStatus")) {
+        j.at("securityStatus").get_to(data.securityStatus);
+    }
+    if (j.count("tradingCurrency")) {
+        j.at("tradingCurrency").get_to(data.tradingCurrency);
+    }
+}
+
+static map<string, string> tickerIndustryToSector = {{"01", "水泥工業"},
+                                                     {"02", "食品工業"},
+                                                     {"03", "塑膠工業"},
+                                                     {"04", "紡織纖維"},
+                                                     {"05", "電機機械"},
+                                                     {"06", "電器電纜"},
+                                                     {"08", "玻璃陶瓷"},
+                                                     {"09", "造紙工業"},
+                                                     {"10", "鋼鐵工業"},
+                                                     {"11", "橡膠工業"},
+                                                     {"12", "汽車工業"},
+                                                     {"14", "建材營造"},
+                                                     {"15", "航運業"},
+                                                     {"16", "觀光事業"},
+                                                     {"17", "金融保險"},
+                                                     {"18", "貿易百貨"},
+                                                     {"19", "綜合"},
+                                                     {"20", "其他"},
+                                                     {"21", "化學工業"},
+                                                     {"22", "生技醫療業"},
+                                                     {"23", "油電燃氣業"},
+                                                     {"24", "半導體業"},
+                                                     {"25", "電腦及週邊設備業"},
+                                                     {"26", "光電業"},
+                                                     {"27", "通信網路業"},
+                                                     {"28", "電子零組件業"},
+                                                     {"29", "電子通路業"},
+                                                     {"30", "資訊服務業"},
+                                                     {"31", "其他電子業"},
+                                                     {"32", "文化創意業"},
+                                                     {"33", "農業科技業"},
+                                                     {"34", "電子商務"},
+                                                     {"80", "管理股票"}};
+
+static map<string, string> sectorToTickerIndustry = {{"水泥工業", "01"},
+                                                     {"食品工業", "02"},
+                                                     {"塑膠工業", "03"},
+                                                     {"紡織纖維", "04"},
+                                                     {"電機機械", "05"},
+                                                     {"電器電纜", "06"},
+                                                     {"玻璃陶瓷", "08"},
+                                                     {"造紙工業", "09"},
+                                                     {"鋼鐵工業", "10"},
+                                                     {"橡膠工業", "11"},
+                                                     {"汽車工業", "12"},
+                                                     {"建材營造", "14"},
+                                                     {"航運業", "15"},
+                                                     {"觀光事業", "16"},
+                                                     {"金融保險", "17"},
+                                                     {"貿易百貨", "18"},
+                                                     {"綜合", "19"},
+                                                     {"其他", "20"},
+                                                     {"化學工業", "21"},
+                                                     {"生技醫療業", "22"},
+                                                     {"油電燃氣業", "23"},
+                                                     {"半導體業", "24"},
+                                                     {"電腦及週邊設備業", "25"},
+                                                     {"光電業", "26"},
+                                                     {"通信網路業", "27"},
+                                                     {"電子零組件業", "28"},
+                                                     {"電子通路業", "29"},
+                                                     {"資訊服務業", "30"},
+                                                     {"其他電子業", "31"},
+                                                     {"文化創意業", "32"},
+                                                     {"農業科技業", "33"},
+                                                     {"電子商務", "34"},
+                                                     {"管理股票", "80"}};
+
 } // namespace fugle_realtime
