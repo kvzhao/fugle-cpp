@@ -20,14 +20,8 @@ struct Args {
     vector<string> symbols;
 };
 
-void clearConsoleLines(int lines) {
-    for (int i = 0; i < lines; ++i) {
-        std::cout << "\033[K\033[1A";
-    }
-}
-
 int main(int argc, char **argv) {
-    CLI::App app{"Fugle API Testbed: for terminal development"};
+    CLI::App app{"Fugle API : Real-time stock price monitor"};
 
     Args args;
     app.add_option("-s,--symbol-list", args.symbols, "watch list");
@@ -41,6 +35,8 @@ int main(int argc, char **argv) {
     FugleIntraday intraday;
     unordered_map<string, TickerResponse> stockInfo;
     unordered_map<string, TradeData> prevTradeData;
+
+    // Fetch stock info
     for (const auto &symbol : args.symbols) {
         spdlog::info("symbol: {}", symbol);
         stockInfo[symbol] = intraday.Ticker({.symbol = symbol});
@@ -48,15 +44,17 @@ int main(int argc, char **argv) {
             TradeData{.ask = 0, .bid = 0, .price = 0, .volume = 0};
     }
 
+    // TODO: Use predefined vector for colume
     Table table;
-    table.add_row({"Stock", "Price", "Change (%)", "+Vol"});
+    table.add_row({"Stock", "Price", "Change (%)", "+Vol", "AvgPrice"});
     table.format().multi_byte_characters(true);
     for (uint32_t i = 0; i < args.symbols.size(); ++i) {
         const auto &symbol = args.symbols[i];
         string stockName = stockInfo[symbol].name + "(" + symbol + ")";
         table.add_row(
             {stockName, floatToString(stockInfo[symbol].previousClose),
-             floatToString(0), to_string(prevTradeData[symbol].volume)});
+             floatToString(stockInfo[symbol].previousClose),
+             to_string(prevTradeData[symbol].volume), floatToString(0)});
     }
 
     while (true) {
@@ -66,6 +64,7 @@ int main(int argc, char **argv) {
             const auto &info = stockInfo.at(symbol);
 
             auto trades = intraday.Trades({.symbol = symbol});
+            auto quote = intraday.Quote({.symbol = symbol});
             auto curTrade = trades.data.back();
             auto prevTrade = prevTradeData[symbol];
 
@@ -73,14 +72,18 @@ int main(int argc, char **argv) {
             float changePercentage =
                 (price - info.previousClose) / info.previousClose * 100.0;
             uint32_t vol = curTrade.volume - prevTrade.volume;
+            float avgPrice = quote.avgPrice;
 
             table[rowIndex][1].set_text(floatToString(price));
             table[rowIndex][2].set_text(floatToString(changePercentage));
             table[rowIndex][3].set_text(to_string(vol));
 
+            table[rowIndex][4].set_text(floatToString(avgPrice));
+
             bool isPriceInc = price - prevTrade.price > 0;
-            bool isPriceChangeUp = changePercentage > 0;
             bool isPriceFlat = price - prevTrade.price == 0;
+
+            bool isPriceChangeUp = changePercentage > 0;
             bool isPriceChangeFlat = changePercentage == 0;
 
             // or near
@@ -103,7 +106,7 @@ int main(int argc, char **argv) {
                 table[rowIndex][1].format().background_color(
                     tabulate::Color::red);
             if (isPriceDownLimit)
-                table[rowIndex][1].format().background_color(
+                table[rowIndex][3].format().background_color(
                     tabulate::Color::green);
 
             prevTradeData[symbol] = curTrade;
