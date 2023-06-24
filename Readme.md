@@ -40,8 +40,9 @@ export FUGLE_API_KEY='...'
 ```
 
 ## ToDos
-* [ ] 成交值排行榜
+* [x] 成交值排行榜
 * [ ] 前一週大漲 20%
+* [ ] 上漲下跌家數，大盤長相
 * [x] Fully support fugle API (Ticker / Stats)
 * [ ] Stock group / watch list
 * [ ] Realtime intraday monitor

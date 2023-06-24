@@ -2,14 +2,15 @@
 #include <spdlog/spdlog.h>
 
 #include <iostream>
-#include <tabulate/table.hpp>
 
 #include "CLI/CLI.hpp"
 #include "fugle.hpp"
+#include "fugle_report.hpp"
 
 using namespace std;
 using namespace fugle_realtime;
-using namespace tabulate;
+using namespace fugle_app;
+// using namespace tabulate;
 
 struct Args {
     string symbol = "2330";
@@ -34,79 +35,35 @@ int main(int argc, char **argv) {
         spdlog::debug("Set to debug log");
     }
 
-    // NOTE: Consider combine
-    FugleIntraday intraday;
-    FugleSnapshot snapshot;
-    FugleHistorical historical;
+    FugleDailyReport::TradingValueRankingReport(
+        {MarketType::TSE, MarketType::OTC});
 
-    auto actives = snapshot.Actives(
-        {.market = MarketType::TSE, .trade = TradeType::VALUE});
-
-    // TODO: Implement this as a specific function
-    // Ranking of Transaction Values
-    tabulate::Table table;
-    table.add_row(
-        {"Rank", "Symbol", "Value", "Volume", "Change", "Change (%)", "Name"});
-    table.format().multi_byte_characters(true);
-
-    uint32_t topStocks = std::min(100, (int)actives.data.size());
-    for (uint32_t i = 0; i < topStocks; ++i) {
-        uint32_t rowIndex = i + 1;
-        const auto &data = actives.data[i];
-        auto valueStr = floatToString(data.tradeValue / 1e8);
-        float changePercent =
-            data.change / (data.closePrice - data.change) * 100.0;
-
-        bool isHitPriceLimit = std::abs(changePercent) > 9.5;
-
-        table.add_row({
-            to_string(rowIndex),
-            data.symbol,
-            valueStr,
-            to_string(data.tradeVolume),
-            floatToString(data.change),
-            floatToString(changePercent),
-            data.name,
-        });
-
-        tabulate::Color color = data.change > 0 ? Color::red : Color::green;
-        if (isHitPriceLimit) {
-            table[rowIndex][4].format().background_color(color);
-            table[rowIndex][5].format().background_color(color);
-        } else {
-            table[rowIndex][4].format().font_color(color);
-            table[rowIndex][5].format().font_color(color);
-        }
-    }
-
-    cout << table << endl;
-
-    auto movers = snapshot.Movers({
-        .market = MarketType::TSE,
-        .direction = MoveDirectionType::UP,
-        .gte = 5,
-    });
+    // auto movers = snapshot.Movers({
+    //     .market = MarketType::TSE,
+    //     .direction = MoveDirectionType::UP,
+    //     .gte = 5,
+    // });
 
     // for (const auto &data : movers.data) {
     //     spdlog::info("{} = {} -> {}", data.name, data.openPrice,
     //                  data.closePrice);
     // }
 
-    auto quotes = snapshot.Quotes({
-        .market = MarketType::TSE,
-    });
+    // auto quotes = snapshot.Quotes({
+    //     .market = MarketType::TSE,
+    // });
 
-    // For Drawing Candles
-    auto candles = historical.Candles({.symbol = args.symbol,
-                                       .from = Date{2023, 5, 19},
-                                       .to = Date{2023, 5, 26},
-                                       .timeframe = CandleTimeFrame::K_DAY});
+    // // For Drawing Candles
+    // auto candles = historical.Candles({.symbol = args.symbol,
+    //                                    .from = Date{2023, 5, 19},
+    //                                    .to = Date{2023, 5, 26},
+    //                                    .timeframe = CandleTimeFrame::K_DAY});
 
-    for (const auto &kbar : candles.data) {
-        spdlog::debug("[{}] open {}, close {}, high {}, low {}, volume {}",
-                      kbar.date, kbar.open, kbar.close, kbar.high, kbar.close,
-                      kbar.volume);
-    }
+    // for (const auto &kbar : candles.data) {
+    //     spdlog::debug("[{}] open {}, close {}, high {}, low {}, volume {}",
+    //                   kbar.date, kbar.open, kbar.close, kbar.high,
+    //                   kbar.close, kbar.volume);
+    // }
 
     // auto vol = intraday.Volumes({.symbol = args.symbol});
     // spdlog::info("vol.symbol {}", vol.symbol);
