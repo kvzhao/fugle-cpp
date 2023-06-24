@@ -24,11 +24,14 @@ struct CompareTradeVolume {
     }
 };
 
-class FugleDailyReport {
+class FugleReport {
   public:
-    static void TradingValueRankingReport(const vector<MarketType> &markets,
-                                          uint32_t numStock = 100);
+    static vector<string>
+    TradingValueRankingReport(const vector<MarketType> &markets,
+                              uint32_t numStock = 100);
     // todo: trading volume
+
+    static bool Is20PercentUpLastWeek(const string &symbol);
 };
 
 } // namespace fugle_app

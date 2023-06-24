@@ -45,4 +45,5 @@ export FUGLE_API_KEY='...'
 * [ ] 上漲下跌家數，大盤長相
 * [x] Fully support fugle API (Ticker / Stats)
 * [ ] Stock group / watch list
-* [ ] Realtime intraday monitor
+* [ ] Realtime intraday monitor with watch list
+* [ ] 盤面趨勢股

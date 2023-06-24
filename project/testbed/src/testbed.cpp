@@ -15,6 +15,7 @@ using namespace fugle_app;
 struct Args {
     string symbol = "2330";
     bool debug = false;
+    bool monitor = false;
 };
 
 int main(int argc, char **argv) {
@@ -23,6 +24,7 @@ int main(int argc, char **argv) {
     Args args;
     app.add_option("-s,--stock-symbol", args.symbol, "symbol");
     app.add_flag("-d,--set-debug-mode", args.debug, "set debug log");
+    app.add_flag("-m,--set-monitor-mode", args.monitor, "set monitor");
 
     try {
         app.parse(argc, argv);
@@ -35,8 +37,10 @@ int main(int argc, char **argv) {
         spdlog::debug("Set to debug log");
     }
 
-    FugleDailyReport::TradingValueRankingReport(
+    auto stocks = FugleReport::TradingValueRankingReport(
         {MarketType::TSE, MarketType::OTC});
+
+    // FugleReport::TopPerformerLastWeek(stocks);
 
     // auto movers = snapshot.Movers({
     //     .market = MarketType::TSE,
@@ -57,10 +61,12 @@ int main(int argc, char **argv) {
     // auto candles = historical.Candles({.symbol = args.symbol,
     //                                    .from = Date{2023, 5, 19},
     //                                    .to = Date{2023, 5, 26},
-    //                                    .timeframe = CandleTimeFrame::K_DAY});
+    //                                    .timeframe =
+    //                                    CandleTimeFrame::K_DAY});
 
     // for (const auto &kbar : candles.data) {
-    //     spdlog::debug("[{}] open {}, close {}, high {}, low {}, volume {}",
+    //     spdlog::debug("[{}] open {}, close {}, high {}, low {}, volume
+    //     {}",
     //                   kbar.date, kbar.open, kbar.close, kbar.high,
     //                   kbar.close, kbar.volume);
     // }
