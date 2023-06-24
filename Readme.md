@@ -38,3 +38,10 @@ Set the key with environment variable or save to bashrc.
 ```bash
 export FUGLE_API_KEY='...'
 ```
+
+## ToDos
+* [ ] 成交值排行榜
+* [ ] 前一週大漲 20%
+* [x] Fully support fugle API (Ticker / Stats)
+* [ ] Stock group / watch list
+* [ ] Realtime intraday monitor

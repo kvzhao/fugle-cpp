@@ -56,6 +56,9 @@ int main(int argc, char **argv) {
         auto valueStr = floatToString(data.tradeValue / 1e8);
         float changePercent =
             data.change / (data.closePrice - data.change) * 100.0;
+
+        bool isHitPriceLimit = std::abs(changePercent) > 9.5;
+
         table.add_row({
             to_string(rowIndex),
             data.symbol,
@@ -65,12 +68,14 @@ int main(int argc, char **argv) {
             floatToString(changePercent),
             data.name,
         });
-        if (data.change > 0) {
-            table[rowIndex][4].format().font_color(Color::red);
-            table[rowIndex][5].format().font_color(Color::red);
+
+        tabulate::Color color = data.change > 0 ? Color::red : Color::green;
+        if (isHitPriceLimit) {
+            table[rowIndex][4].format().background_color(color);
+            table[rowIndex][5].format().background_color(color);
         } else {
-            table[rowIndex][4].format().font_color(Color::green);
-            table[rowIndex][5].format().font_color(Color::green);
+            table[rowIndex][4].format().font_color(color);
+            table[rowIndex][5].format().font_color(color);
         }
     }
 
