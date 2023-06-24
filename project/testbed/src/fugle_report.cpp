@@ -61,7 +61,7 @@ FugleWeeklyReport::TradingValueRankingReport(const vector<MarketType> &markets,
     cout << date << " - Market (" << joinWith(marketStr, ", ") << ")" << endl;
     tabulate::Table table;
     table.add_row({"Rank", "Symbol", "Value (E)", "Vol Ratio", "Change",
-                   "Change (%)", "Name", "20% UP", "Sector"});
+                   "Change (%)", "Name", "WChange (%)", "20% UP", "Sector"});
     table.format().multi_byte_characters(true);
 
     vector<string> sortedStockSymbols;
@@ -93,7 +93,8 @@ FugleWeeklyReport::TradingValueRankingReport(const vector<MarketType> &markets,
         string volRatio = "x " + floatToString(taReport.volRation);
         table.add_row({to_string(rowIndex), data.symbol, valueStr, volRatio,
                        floatToString(data.change), floatToString(changePercent),
-                       data.name, is20UpStr, sector});
+                       data.name, floatToString(taReport.changePercent),
+                       is20UpStr, sector});
 
         tabulate::Color color =
             data.change > 0 ? tabulate::Color::red : tabulate::Color::green;
@@ -142,6 +143,7 @@ TAWeekyReport FugleWeeklyReport::TechnicalAnalysisWeekly(const string &symbol) {
         float changePercent = (current.close - last.close) / last.close * 100.0;
         float volRatio = static_cast<float>(current.volume) / last.volume;
         result.volRation = volRatio;
+        result.changePercent = changePercent;
 
         if (changePercent >= topPerformancePercentage) {
             result.is20Percent = true;

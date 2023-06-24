@@ -26,6 +26,7 @@ struct CompareTradeVolume {
 
 struct TAWeekyReport {
     bool is20Percent = false;
+    float changePercent = 0.0;
     float volRation = 1.0;
 };
 
