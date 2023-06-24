@@ -13,6 +13,8 @@ class FugleHistorical : public FugleHttpClientBase {
     HistoricalChandlesResponse
     Candles(const HistoricalChandlesParameter &param);
 
+    StatsResponse Stats(const StatsParameter &param);
+
   private:
 };
 

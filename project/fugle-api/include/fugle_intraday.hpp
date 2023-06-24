@@ -12,6 +12,8 @@ class FugleIntraday : public FugleHttpClientBase {
 
     TickersResponse Tickers(const TickersParameter &param);
 
+    TickerResponse Ticker(const TickerParameter &param);
+
     VolumeResponse Volumes(const VolumeParameter &param);
 
     QuoteResponse Quote(const QuoteParameter &param);

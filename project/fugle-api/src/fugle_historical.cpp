@@ -50,3 +50,22 @@ FugleHistorical::Candles(const HistoricalChandlesParameter &param) {
 
     return candlesResp;
 }
+
+StatsResponse FugleHistorical::Stats(const StatsParameter &param) {
+    string symbol = param.symbol;
+    string resquest = joinWithSlash({kStats, symbol});
+
+    spdlog::debug("resquest {}", resquest);
+
+    string response = FugleHttpClientBase::SimpleGet(resquest);
+
+    auto jsonFormat = nlohmann::json::parse(response);
+    StatsResponse statsResp;
+    try {
+        jsonFormat.get_to(statsResp);
+    } catch (const std::exception &ex) {
+        spdlog::error(ex.what());
+    }
+
+    return statsResp;
+}
