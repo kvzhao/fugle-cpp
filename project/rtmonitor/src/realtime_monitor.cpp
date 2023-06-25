@@ -45,16 +45,20 @@ int main(int argc, char **argv) {
     }
 
     // TODO: Use predefined vector for colume
+    // TODO: Pressure & Support
+
     Table table;
-    table.add_row({"Stock", "Price", "Change (%)", "+Vol", "AvgPrice"});
+    table.add_row(
+        {"Stock", "Price", "Change (%)", "+Vol", "AvgPrice", "Bid", "Ask"});
     table.format().multi_byte_characters(true);
     for (uint32_t i = 0; i < args.symbols.size(); ++i) {
         const auto &symbol = args.symbols[i];
         string stockName = stockInfo[symbol].name + "(" + symbol + ")";
-        table.add_row(
-            {stockName, floatToString(stockInfo[symbol].previousClose),
-             floatToString(stockInfo[symbol].previousClose),
-             to_string(prevTradeData[symbol].volume), floatToString(0)});
+        table.add_row({stockName,
+                       floatToString(stockInfo[symbol].previousClose),
+                       floatToString(stockInfo[symbol].previousClose),
+                       to_string(prevTradeData[symbol].volume),
+                       floatToString(0), floatToString(0), floatToString(0)});
     }
 
     while (true) {
@@ -65,6 +69,7 @@ int main(int argc, char **argv) {
 
             auto trades = intraday.Trades({.symbol = symbol});
             auto quote = intraday.Quote({.symbol = symbol});
+
             auto curTrade = trades.data.back();
             auto prevTrade = prevTradeData[symbol];
 
@@ -74,11 +79,17 @@ int main(int argc, char **argv) {
             uint32_t vol = curTrade.volume - prevTrade.volume;
             float avgPrice = quote.avgPrice;
 
+            float bidRatio = static_cast<float>(quote.total.tradeVolumeAtBid) /
+                             quote.total.tradeVolume * 100.0;
+            float askRatio = static_cast<float>(quote.total.tradeVolumeAtAsk) /
+                             quote.total.tradeVolume * 100.0;
+
             table[rowIndex][1].set_text(floatToString(price));
             table[rowIndex][2].set_text(floatToString(changePercentage));
             table[rowIndex][3].set_text(to_string(vol));
-
             table[rowIndex][4].set_text(floatToString(avgPrice));
+            table[rowIndex][5].set_text(floatToString(bidRatio));
+            table[rowIndex][6].set_text(floatToString(askRatio));
 
             bool isPriceInc = price - prevTrade.price > 0;
             bool isPriceFlat = price - prevTrade.price == 0;
