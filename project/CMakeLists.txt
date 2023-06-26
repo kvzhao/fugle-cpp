@@ -3,6 +3,8 @@ add_subdirectory(fugle-api)
 
 add_subdirectory(testbed)
 
+add_subdirectory(rtmonitor)
+
 # make install
 install(TARGETS
     fugle
