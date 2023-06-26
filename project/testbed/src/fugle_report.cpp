@@ -12,7 +12,6 @@
 #include <vector>
 
 #include "fugle_report.hpp"
-#include "progressbar.hpp"
 
 using namespace std;
 using namespace fugle_realtime;

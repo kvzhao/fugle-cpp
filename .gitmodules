@@ -6,6 +6,3 @@
 	path = thirdparty/TermOx
 	url = https://github.com/a-n-t-h-o-n-y/TermOx
 	branch = v1.1.1
-[submodule "thirdparty/progressbar"]
-	path = thirdparty/progressbar
-	url = https://github.com/gipert/progressbar

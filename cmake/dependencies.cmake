@@ -33,5 +33,3 @@ find_package(cpprestsdk REQUIRED)
 
 set(SQLITECPP_RUN_CPPCHECK OFF CACHE BOOL "" FORCE)
 set(SQLITECPP_RUN_CPPLINT OFF CACHE BOOL "" FORCE)
-
-include_directories(${CMAKE_SOURCE_DIR}/thirdparty/progressbar/include)
