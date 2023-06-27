@@ -33,8 +33,15 @@ int main(int argc, char **argv) {
     }
 
     FugleIntraday intraday;
+    FugleHistorical historical;
+    FugleSnapshot snapshot;
+
     unordered_map<string, TickerResponse> stockInfo;
     unordered_map<string, TradeData> prevTradeData;
+    unordered_map<string, vector<CandleData>> candleDay;
+    // unordered_map<string, vector<CandleData>> candleWeek;
+
+    // TODO: Show INDEX by default
 
     // Fetch stock info
     for (const auto &symbol : args.symbols) {
@@ -42,6 +49,12 @@ int main(int argc, char **argv) {
         stockInfo[symbol] = intraday.Ticker({.symbol = symbol});
         prevTradeData[symbol] =
             TradeData{.ask = 0, .bid = 0, .price = 0, .volume = 0};
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(250));
+        // TODO: time frame, sort with time
+        historical
+            .Candles({.symbol = symbol, .timeframe = CandleTimeFrame::K_DAY})
+            .data;
     }
 
     // TODO: Use predefined vector for colume
@@ -49,7 +62,7 @@ int main(int argc, char **argv) {
 
     Table table;
     table.add_row(
-        {"Stock", "Price", "Change (%)", "+Vol", "AvgPrice", "Bid", "Ask"});
+        {"Stock", "Price", "Change (%)", "+Vol", "AvgPrice", "Val (E)"});
     table.format().multi_byte_characters(true);
     for (uint32_t i = 0; i < args.symbols.size(); ++i) {
         const auto &symbol = args.symbols[i];
@@ -58,7 +71,8 @@ int main(int argc, char **argv) {
                        floatToString(stockInfo[symbol].previousClose),
                        floatToString(stockInfo[symbol].previousClose),
                        to_string(prevTradeData[symbol].volume),
-                       floatToString(0), floatToString(0), floatToString(0)});
+                       floatToString(0), floatToString(0)});
+        table[i + 1][1].format().font_style({FontStyle::bold});
     }
 
     while (true) {
@@ -78,18 +92,14 @@ int main(int argc, char **argv) {
                 (price - info.previousClose) / info.previousClose * 100.0;
             uint32_t vol = curTrade.volume - prevTrade.volume;
             float avgPrice = quote.avgPrice;
+            float val = quote.total.tradeValue / 1e8;
 
-            float bidRatio = static_cast<float>(quote.total.tradeVolumeAtBid) /
-                             quote.total.tradeVolume * 100.0;
-            float askRatio = static_cast<float>(quote.total.tradeVolumeAtAsk) /
-                             quote.total.tradeVolume * 100.0;
-
+            // TODO: Add technical analysis
             table[rowIndex][1].set_text(floatToString(price));
             table[rowIndex][2].set_text(floatToString(changePercentage));
             table[rowIndex][3].set_text(to_string(vol));
             table[rowIndex][4].set_text(floatToString(avgPrice));
-            table[rowIndex][5].set_text(floatToString(bidRatio));
-            table[rowIndex][6].set_text(floatToString(askRatio));
+            table[rowIndex][5].set_text(floatToString(val));
 
             bool isPriceInc = price - prevTrade.price > 0;
             bool isPriceFlat = price - prevTrade.price == 0;
@@ -116,9 +126,12 @@ int main(int argc, char **argv) {
             if (isPriceUpLimit)
                 table[rowIndex][1].format().background_color(
                     tabulate::Color::red);
-            if (isPriceDownLimit)
-                table[rowIndex][3].format().background_color(
+            else if (isPriceDownLimit)
+                table[rowIndex][1].format().background_color(
                     tabulate::Color::green);
+            else
+                table[rowIndex][1].format().background_color(
+                    tabulate::Color::none);
 
             prevTradeData[symbol] = curTrade;
         }
