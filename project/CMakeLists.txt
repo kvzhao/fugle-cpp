@@ -9,6 +9,7 @@ add_subdirectory(rtmonitor)
 install(TARGETS
     fugle
     testbed
+    rtmonitor
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
