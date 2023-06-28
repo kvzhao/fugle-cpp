@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
             auto trades = intraday.Trades({.symbol = symbol});
             auto quote = intraday.Quote({.symbol = symbol});
 
-            auto curTrade = trades.data.back();
+            auto curTrade = trades.data.front();
             auto prevTrade = prevTradeData[symbol];
 
             float price = curTrade.price;
