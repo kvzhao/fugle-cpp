@@ -45,6 +45,12 @@ int main(int argc, char **argv) {
         return 0;
     }
 
+    if (args.mode == "value") {
+        auto stocks = FugleWeeklyReport::DailyTradingValueRankingReport(
+            {MarketType::TSE, MarketType::OTC}, 100);
+        return 0;
+    }
+
     if (args.mode == "get") {
         FugleHttpClientBase base;
         if (!args.command.empty()) {
