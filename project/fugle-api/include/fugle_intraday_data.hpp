@@ -180,7 +180,8 @@ inline void from_json(const BasicJsonType &j, QuoteResponse &data) {
     j.at("lastSize").get_to(data.lastSize);
     j.at("serial").get_to(data.serial);
     j.at("lastUpdated").get_to(data.lastUpdated);
-    j.at("isClose").get_to(data.isClose);
+    if (j.count("isClose"))
+        j.at("isClose").get_to(data.isClose);
     j.at("bids").get_to(data.bids);
     j.at("asks").get_to(data.asks);
     j.at("lastTrial").get_to(data.lastTrial);

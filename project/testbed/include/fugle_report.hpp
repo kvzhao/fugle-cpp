@@ -36,6 +36,9 @@ class FugleWeeklyReport {
     TradingValueRankingReport(const vector<MarketType> &markets,
                               uint32_t numStock = 100);
     // todo: trading volume
+    static vector<string>
+    DailyTradingValueRankingReport(const vector<MarketType> &markets,
+                                   uint32_t numStock = 100);
 
     static bool Is20PercentUpLastWeek(const string &symbol);
 
