@@ -29,5 +29,4 @@ include(cmake/dependencies.cmake)
 include(cmake/compiler_options.cmake)
 
 add_subdirectory(thirdparty/SQLiteCpp)
-add_subdirectory(thirdparty/TermOx EXCLUDE_FROM_ALL)
 add_subdirectory(project)
