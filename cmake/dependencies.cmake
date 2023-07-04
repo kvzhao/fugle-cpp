@@ -40,8 +40,8 @@ endif()
 FetchContent_MakeAvailable(cli11)
 
 find_package(OpenSSL REQUIRED)
-
 find_package(cpprestsdk REQUIRED)
+find_package(CURL REQUIRED)
 
 set(SQLITECPP_RUN_CPPCHECK OFF CACHE BOOL "" FORCE)
 set(SQLITECPP_RUN_CPPLINT OFF CACHE BOOL "" FORCE)

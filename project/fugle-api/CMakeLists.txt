@@ -34,6 +34,7 @@ target_include_directories(
     ${TARGET_NAME}
     PUBLIC
     ${TARGET_INCLUDE_FOLDER}
+    ${CURL_INCLUDE_DIRS}
 )
 
 target_link_libraries(
@@ -43,4 +44,5 @@ target_link_libraries(
     cpprestsdk::cpprest
     OpenSSL::SSL
     OpenSSL::Crypto
+    CURL::libcurl
 )

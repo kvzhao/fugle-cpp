@@ -8,6 +8,7 @@
 #include <cpprest/filestream.h>
 #include <cpprest/http_client.h>
 
+#include <curl/curl.h>
 #include <nlohmann/json.hpp>
 
 using namespace web;
