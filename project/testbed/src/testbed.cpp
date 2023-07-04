@@ -6,6 +6,7 @@
 #include "CLI/CLI.hpp"
 #include "fugle.hpp"
 #include "fugle_report.hpp"
+#include "test_db.hpp"
 
 using namespace std;
 using namespace fugle_realtime;
@@ -60,6 +61,10 @@ int main(int argc, char **argv) {
             spdlog::warn("no command provided for get");
 
         return 0;
+    }
+
+    if (args.mode == "db") {
+        return StockDBTester::RunSQLiteSample();
     }
 
     spdlog::error("run mode {} not found", args.mode);

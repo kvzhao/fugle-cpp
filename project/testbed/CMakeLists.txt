@@ -5,6 +5,7 @@ set(TARGET_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/testbed.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/fugle_report.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/fugle_monitor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_db.cpp
 )
 
 add_executable(${TARGET_NAME} ${TARGET_SOURCES})
@@ -35,4 +36,5 @@ target_link_libraries(
     CLI11::CLI11
     SQLiteCpp
     ${CMAKE_BINARY_DIR}/export_libs/libfugle.a
+    ${CMAKE_BINARY_DIR}/export_libs/libstockdb.a
 )

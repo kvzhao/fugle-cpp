@@ -1,13 +1,16 @@
 
+# modules
 add_subdirectory(fugle-api)
+add_subdirectory(stockdb)
 
+# applications
 add_subdirectory(testbed)
-
 add_subdirectory(rtmonitor)
 
 # make install
 install(TARGETS
     fugle
+    stockdb
     testbed
     rtmonitor
     RUNTIME DESTINATION bin
