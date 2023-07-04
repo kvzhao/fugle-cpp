@@ -2,3 +2,6 @@ build/
 api_key.txt
 .vscode
 .DS_Store
+config.ini
+config.simulation.ini
+*.p12
