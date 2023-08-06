@@ -45,3 +45,9 @@ export FUGLE_API_KEY='...'
 2. Database and unified data format
 3. Backtesting
 4. Reproduce apps
+
+Build from source
+```
+mkdir build; cd bui;d
+cmake .. -DPYTHON_EXECUTABLE=/usr/bin/python3 
+```

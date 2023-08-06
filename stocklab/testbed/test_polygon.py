@@ -1,5 +1,5 @@
 from polygon import RESTClient
-from python.common.api import StockAPI, GetKey
+from stocklab.common.api import StockAPI, GetKey
 
 client = RESTClient(api_key=GetKey(StockAPI.POLYGON))
 

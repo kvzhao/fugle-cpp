@@ -3,7 +3,7 @@ import os
 from fugle_marketdata import RestClient
 from FinMind.data import DataLoader
 
-from python.common.api import GetKey, StockAPI
+from stocklab.common.api import GetKey, StockAPI
 from typing import List, Dict
 
 import pandas as pd

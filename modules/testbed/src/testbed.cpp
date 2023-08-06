@@ -15,7 +15,7 @@ using namespace fugle_app;
 struct Args {
     string symbol = "2330";
     string command;
-    string mode = "report";
+    string mode = "value";
     bool debug = false;
 };
 

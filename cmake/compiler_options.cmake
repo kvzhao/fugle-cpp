@@ -1,3 +1,6 @@
+
+set(CMAKE_CXX_STANDARD 17)
+
 list(APPEND compiler_options
     -Wall
     -Wextra
