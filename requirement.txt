@@ -1,0 +1,5 @@
+FinMind
+fugle-marketdata
+fugle-trade
+pysqlite3
+pandas
