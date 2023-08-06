@@ -2,6 +2,7 @@
 .vscode
 .DS_Store
 config*.ini
+*.md
 
 # folders
 build/
