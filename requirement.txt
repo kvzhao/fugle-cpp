@@ -1,0 +1,6 @@
+FinMind
+fugle-marketdata
+fugle-trade
+pysqlite3
+pandas
+polygon-api-client
