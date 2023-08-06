@@ -1,6 +1,6 @@
 from fugle_marketdata import RestClient
 
-from python.common.api import GetKey, StockAPI
+from stocklab.common.api import GetKey, StockAPI
 
 client = RestClient(api_key=GetKey(StockAPI.FUGLE))
 stock = client.stock
