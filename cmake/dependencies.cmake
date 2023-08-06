@@ -18,24 +18,18 @@ CPMAddPackage(
     VERSION 1.0
 )
 
+CPMAddPackage(
+    NAME pybind11
+    GITHUB_REPOSITORY pybind/pybind11
+    GIT_TAG v2.11.1
+)
+
 FetchContent_Declare(
     cli11
     GIT_REPOSITORY https://github.com/CLIUtils/CLI11
     GIT_TAG v2.2.0
 )
 FetchContent_MakeAvailable(cli11)
-
-FetchContent_Declare(
-    pybind11
-    GIT_REPOSITORY https://github.com/pybind/pybind11
-    GIT_TAG v2.2.3
-)
-
-CPMAddPackage(
-    NAME pybind11
-    GIT_REPOSITORY https://github.com/pybind/pybind11.git
-    GIT_TAG v2.11.1
-)
 
 find_package(OpenSSL REQUIRED)
 find_package(cpprestsdk REQUIRED)

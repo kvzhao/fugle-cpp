@@ -5,7 +5,7 @@ add_subdirectory(testbed)
 
 add_subdirectory(rtmonitor)
 
-add_subdirectory(sample-pybind)
+add_subdirectory(sample_pybind)
 
 # make install
 install(TARGETS
