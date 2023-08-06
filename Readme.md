@@ -3,6 +3,7 @@
 
 * fugle-cpp: HTTP API for c++
 * fugle-terminal
+* name change -> stocklab
 
 
 ## Quick start
@@ -14,7 +15,7 @@ Install thirdparty libs
 git submodule update --init --recursive --jobs 0
 ```
 
-It will download `SQLiteCpp` and `TermOx`.
+It will download `SQLiteCpp`.
 
 
 2. Install restcppsdk
@@ -39,11 +40,8 @@ Set the key with environment variable or save to bashrc.
 export FUGLE_API_KEY='...'
 ```
 
-## ToDos
-* [x] 成交值排行榜
-* [ ] 前一週大漲 20%
-* [ ] 上漲下跌家數，大盤長相
-* [x] Fully support fugle API (Ticker / Stats)
-* [ ] Stock group / watch list
-* [ ] Realtime intraday monitor with watch list
-* [ ] 盤面趨勢股
+## Plans
+1. Data downloader
+2. Database and unified data format
+3. Backtesting
+4. Reproduce apps
