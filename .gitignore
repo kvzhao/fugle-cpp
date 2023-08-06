@@ -1,4 +1,8 @@
-build/
-api_key.txt
+# files
 .vscode
 .DS_Store
+config*.ini
+
+# folders
+build/
+python/trade/cert/
