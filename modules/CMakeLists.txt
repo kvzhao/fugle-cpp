@@ -1,9 +1,8 @@
-
+# include modules
 add_subdirectory(fugle-api)
-
 add_subdirectory(testbed)
-
 add_subdirectory(rtmonitor)
+add_subdirectory(sample-pybind11)
 
 # make install
 install(TARGETS
