@@ -18,7 +18,7 @@ install(TARGETS
 
 install(
     DIRECTORY
-    ${CMAKE_SOURCE_DIR}/project/fugle-api/include
+    ${CMAKE_SOURCE_DIR}/modules/fugle-api/include
     DESTINATION
     include/fugle
 )

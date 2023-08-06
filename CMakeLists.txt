@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 
-project(fugleTerminal)
+project(StockLab)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
@@ -29,4 +29,4 @@ include(cmake/dependencies.cmake)
 include(cmake/compiler_options.cmake)
 
 add_subdirectory(thirdparty/SQLiteCpp)
-add_subdirectory(project)
+add_subdirectory(modules)
