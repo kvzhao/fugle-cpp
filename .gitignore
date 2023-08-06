@@ -8,5 +8,4 @@ config*.ini
 # folders
 build/
 stocklab/trade/cert/
-thirdparty
 __pycache__

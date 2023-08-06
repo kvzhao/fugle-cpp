@@ -2,3 +2,6 @@
 	path = thirdparty/SQLiteCpp
 	url = https://github.com/SRombauts/SQLiteCpp.git
 	branch = 3.3.0
+[submodule "thirdparty/pybind11"]
+	path = thirdparty/pybind11
+	url = https://github.com/pybind/pybind11
