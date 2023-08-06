@@ -25,9 +25,6 @@ set_target_properties(${TARGET_NAME} PROPERTIES
 
 target_link_libraries(
     ${TARGET_NAME}
-    PRIVATE ftxui::screen
-    PRIVATE ftxui::dom
-    PRIVATE ftxui::component
     spdlog
     nlohmann_json
     cpprestsdk::cpprest
