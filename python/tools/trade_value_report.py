@@ -3,7 +3,7 @@ import os
 from fugle_marketdata import RestClient
 from FinMind.data import DataLoader
 
-from python.common.api import GetFugleAPI, GetFinMindAPI
+from python.common.api import GetKey, StockAPI
 from typing import List, Dict
 
 import pandas as pd
@@ -74,7 +74,7 @@ def append_institutional_data(data_list, date, api):
 def main(args):
 
     # login fugle
-    client = RestClient(api_key=GetFugleAPI())
+    client = RestClient(api_key=GetKey(StockAPI.FUGLE))
 
     stock = client.stock
     ret_dict = stock.snapshot.actives(market=args.market, trade=args.trade)
@@ -88,7 +88,7 @@ def main(args):
     if args.add_inst_data:
         # login finmind
         fin_api = DataLoader()
-        fin_api.login_by_token(GetFinMindAPI())
+        fin_api.login_by_token(GetKey(StockAPI.FINMIND))
         data = append_institutional_data(data, date, fin_api)
 
     # TODO: save data direcly into db
