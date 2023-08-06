@@ -1,9 +1,12 @@
 
-# Fugle Terminal (WIP)
+# Fugle Cpp
 
-* fugle-cpp: HTTP API for c++
-* fugle-terminal
-* name change -> stocklab
+This repo is the stock lab which used for stock info collection and strategy developments.
+
+Several topics will be focused
+
+* fugle APIs for TSE stocks
+* polygon APIs for US stocks
 
 
 ## Quick start
@@ -14,9 +17,7 @@ Install thirdparty libs
 ```bash
 git submodule update --init --recursive --jobs 0
 ```
-
 It will download `SQLiteCpp`.
-
 
 2. Install restcppsdk
 
@@ -40,14 +41,15 @@ Set the key with environment variable or save to bashrc.
 export FUGLE_API_KEY='...'
 ```
 
+Build from source
+```
+mkdir build; cd bui;d
+cmake .. -DPYTHON_EXECUTABLE=/usr/bin/python3 
+make
+```
+
 ## Plans
 1. Data downloader
 2. Database and unified data format
 3. Backtesting
 4. Reproduce apps
-
-Build from source
-```
-mkdir build; cd bui;d
-cmake .. -DPYTHON_EXECUTABLE=/usr/bin/python3 
-```
