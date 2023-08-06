@@ -2,7 +2,3 @@
 	path = thirdparty/SQLiteCpp
 	url = https://github.com/SRombauts/SQLiteCpp.git
 	branch = 3.3.0
-[submodule "thirdparty/TermOx"]
-	path = thirdparty/TermOx
-	url = https://github.com/a-n-t-h-o-n-y/TermOx
-	branch = v1.1.1
