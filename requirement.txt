@@ -4,4 +4,4 @@ fugle-trade
 pysqlite3
 pandas
 polygon-api-client
-urwid==2.1.2
+rich
