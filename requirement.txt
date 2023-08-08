@@ -4,3 +4,4 @@ fugle-trade
 pysqlite3
 pandas
 polygon-api-client
+rich
