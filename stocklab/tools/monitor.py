@@ -14,6 +14,8 @@ class TickerMonitor(object):
         self.stock = client.stock
         self.symbols = symbols
 
+        # TODO: parepare historical data
+
     def screen(self) -> Table:
 
         table = Table()
@@ -21,43 +23,47 @@ class TickerMonitor(object):
         table.add_column('Symbol')
         table.add_column('Name')
         table.add_column('Price')
+        table.add_column('avgPrice')
         table.add_column('Change')
         table.add_column('Value (E)')
+        table.add_column('Volume (k)')
 
         for symbol in self.symbols:
             quote = self.stock.intraday.quote(symbol=symbol)
             trade_data = self.stock.intraday.trades(symbol=symbol)['data']
 
             last_trade = trade_data[0]
+            deal_price = last_trade['price']
+            deal_size = last_trade['size']
 
             stock_name = quote['name']
-            stock_price = last_trade['price']
             average_price = quote['avgPrice']
             change = quote['change']
             change_percent = quote['changePercent']
             total = quote['total']
-            trade_value = total['tradeValue'] / 1e8
+            total_value = total['tradeValue'] / 1e8
+            total_size = total['tradeVolume'] / 1e3
 
             color = 'red' if change_percent > 0 else 'green'
             sign = '+' if change_percent > 0 else ''
 
-            priceStr = f"{stock_price:3.1f} ({sign}{change})"
+            priceStr = f"{deal_price:3.1f} ({sign}{change})"
 
             table.add_row(
                 f"{symbol}",
                 f"{stock_name}",
                 f"[{color}]{priceStr}",
+                f"{average_price:2.2f}",
                 f"[{color}]{change_percent:2.2f} %",
-                f"{trade_value:.2f}",
+                f"{total_value:.2f}",
+                f"{total_size:.1f}",
             )
 
         return table
 
 def main(args):
 
-    symbol_list = ['2330', '3231', '3583', '5371', '3032']
-
-    monitor = TickerMonitor(symbol_list)
+    monitor = TickerMonitor(args.stock_list)
 
     with Live(monitor.screen(), refresh_per_second=1) as live:
         while True:
@@ -68,8 +74,8 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Realtime Monitor of Stock Prices")
-    parser.add_argument("-s","--stock_id", type=str, default="2330",
-                        help="")
+    parser.add_argument("-s","--stock_list", nargs='+', type=str,
+                        help="symbol list")
     args = parser.parse_args()
 
     main(args)
